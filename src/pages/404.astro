@@ -1,6 +1,29 @@
 ---
-// const page = Astro.url.pathname;
-// const parsedHash = page.substring(1, page.length - 1);
-
-// console.log("SOY 4044444", parsedHash);
+import Layout from '../layouts/Layout.astro'
+import KeepCalmGif from '../components/KeepCalmGif.astro'
 ---
+
+<Layout title='404 not found'>
+  <main class='w-full overflow-y-auto overflow-x-hidden scroll-smooth h-screen'>
+    <div class='pt-20'>
+      <section
+        class='flex flex-col items-center justify-center
+    max-w-md mx-auto rounded-lg shadow-md overflow-hidden md:min-w-0 py-10'
+      >
+        <header class='h-full w-56'>
+          <KeepCalmGif />
+        </header>
+        <h1
+          class='my-3 text-6xl font-bold bg-gradient-to-r from-purple-950 to-indigo-700 bg-clip-text text-transparent'
+        >
+          404
+        </h1>
+        <p class='my-1 text-xl font-semibold text-gray-600'>Page Not Found</p>
+        <a
+          class='my-2 bg-gradient-to-r from-purple-950 to-indigo-700 bg-clip-text text-transparent hover:underline'
+          href='/'>Inicio</a
+        >
+      </section>
+    </div>
+  </main>
+</Layout>

@@ -1,6 +1,6 @@
-import { IStandaloneEditorConstructionOptions } from 'monaco-editor'
+import { editor } from 'monaco-editor'
 
-export const MONACO_EDITOR_COMMON_OPTIONS: IStandaloneEditorConstructionOptions = {
+export const MONACO_EDITOR_COMMON_OPTIONS: editor.IStandaloneEditorConstructionOptions = {
 	minimap: {
 		enabled: false
 	},
