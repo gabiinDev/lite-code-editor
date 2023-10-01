@@ -1,0 +1,68 @@
+<script>
+  import { splitWindow } from '../external/splitterWindow'
+  import {
+    initHtmlEditor,
+    initCssEditor,
+    initJsEditor,
+    setInitEditorContent
+  } from '../utils/editor'
+
+  // spliter
+  splitWindow()
+
+  // DOM
+  const $previewEditor = document.querySelector('iframe') as HTMLElement
+
+  // editor
+  const htmlMonaco = initHtmlEditor($previewEditor)
+  const cssMonaco = initCssEditor($previewEditor)
+  const jsMonaco = initJsEditor($previewEditor)
+
+  const url = window.location.pathname
+
+  setInitEditorContent(url, $previewEditor, htmlMonaco, cssMonaco, jsMonaco)
+</script>
+
+<div class='editor grid w-full overflow-y-scroll snap-y h-screen'>
+  <div id='html-editor' class='h-full min-h-full w-full min-w-full'></div>
+  <div id='preview-editor' class='bg-black snap-start h-full min-h-full w-full min-w-full'>
+    <iframe title='Preview' class='w-full h-full border-0'></iframe>
+  </div>
+  <div id='js-editor' class='h-full min-h-full w-full min-w-full'></div>
+  <div id='css-editor' class='h-full min-h-full w-full min-w-full'></div>
+  <div class='gutter-col gutter-col-1 border-none'></div>
+  <div class='gutter-row gutter-row-1 border-none'></div>
+</div>
+
+<style is:inline>
+  .editor {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 75px);
+    scroll-snap-align: start;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-rows: 1fr 5px 1fr;
+    grid-template-columns: 1fr 5px 1fr;
+  }
+
+  .gutter-col {
+    grid-row: 1/-1;
+    cursor: col-resize;
+  }
+
+  .gutter-col-1 {
+    grid-column: 2;
+  }
+
+  .gutter-row {
+    grid-column: 1/-1;
+    cursor: row-resize;
+  }
+
+  .gutter-row-1 {
+    grid-row: 2;
+  }
+</style>

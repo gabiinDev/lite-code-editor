@@ -1,59 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Landing from '../components/Landing.astro'
+import Layout from '../layouts/Layout.astro'
 ---
 
-<script>
-  import { splitWindow } from "../external/splitterWindow";
-  import { initHtmlEditor, initCssEditor } from "../utils/editor";
-
-  // DOM
-  const $previewEditor = document.querySelector("iframe") as HTMLElement;
-
-  // editor
-  initHtmlEditor($previewEditor);
-  initCssEditor($previewEditor);
-
-  // spliter
-  splitWindow();
-</script>
-
-<Layout title="Lite Code Editor">
-  <main class="w-full h-screen bg-sky-950">
-    <div class="grid w-full h-screen snap-mandatory min-h-screen snap-start">
-      <div id="html-editor" type="text"></div>
-      <div id="preview-editor" class="bg-white">
-        <iframe class="w-full h-full border-0"></iframe>
-      </div>
-      <div id="js-editor"></div>
-      <div id="css-editor"></div>
-      <div class="gutter-col gutter-col-1 border-none"></div>
-      <div class="gutter-row gutter-row-1 border-none"></div>
-    </div>
+<Layout title='Lite Code Editor'>
+  <main class='grid grid-rows-[auto] container m-auto'>
+    <Landing />
   </main>
 </Layout>
-
-<style>
-  .grid {
-    display: grid;
-    grid-template-rows: 1fr 5px 1fr;
-    grid-template-columns: 1fr 5px 1fr;
-  }
-
-  .gutter-col {
-    grid-row: 1/-1;
-    cursor: col-resize;
-  }
-
-  .gutter-col-1 {
-    grid-column: 2;
-  }
-
-  .gutter-row {
-    grid-column: 1/-1;
-    cursor: row-resize;
-  }
-
-  .gutter-row-1 {
-    grid-row: 2;
-  }
-</style>

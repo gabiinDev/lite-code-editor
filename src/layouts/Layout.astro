@@ -1,33 +1,36 @@
 ---
+import { ViewTransitions } from 'astro:transitions'
 interface Props {
-  title: string;
+  title: string
 }
 
-const { title } = Astro.props;
+const { title } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang='en'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <meta charset='UTF-8' />
+    <meta name='description' content='Astro description' />
+    <meta name='viewport' content='width=device-width' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='generator' content={Astro.generator} />
+    <ViewTransitions />
     <title>{title}</title>
   </head>
-  <body>
+  <body
+    class='min-h-screen min-w-max bg-gradient-to-t from-gray-700 via-gray-900 to-black bg-no-repeat bg-cover'
+  >
     <slot />
+    <style is:global>
+      * {
+        box-sizing: border-box;
+      }
+
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+    </style>
   </body>
 </html>
-
-<style is:global>
-  * {
-    box-sizing: border-box;
-  }
-
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
-</style>
