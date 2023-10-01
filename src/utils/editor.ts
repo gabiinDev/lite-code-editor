@@ -8,28 +8,11 @@ import { emmetHTML } from 'emmet-monaco-es'
 
 import { createHtmlTemplate } from '../utils/common'
 
+import { MONACO_EDITOR_COMMON_OPTIONS } from '../constants/monacoEditor'
+
 let htmlCodeContent = ''
 let cssCodeContent = ''
 let jsCodeContent = ''
-
-const MONACO_EDITOR_COMMON_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions = {
-	minimap: {
-		enabled: false
-	},
-	wordWrap: 'on',
-	theme: 'vs-dark',
-	fontLigatures: 'on',
-	fontSize: 17,
-	lineNumbers: 'off',
-	tabSize: 2,
-	automaticLayout: true,
-	fixedOverflowWidgets: true,
-	scrollBeyondLastLine: false,
-	roundedSelection: false,
-	padding: {
-		top: 16
-	}
-}
 
 window.MonacoEnvironment = {
 	getWorker(_: string, label: string) {
@@ -55,9 +38,12 @@ export const initHtmlEditor = (previewElement: HTMLElement) => {
 		...MONACO_EDITOR_COMMON_OPTIONS
 	})
 
+	monacoHtmlEditor.onDidChangeModelLanguageConfiguration(() => {
+		console.log('soy onDidChangeModelLanguageConfiguration')
+	})
+
 	monacoHtmlEditor.onDidChangeModelContent(() => {
 		htmlCodeContent = monacoHtmlEditor.getValue()
-		//console.log('html', htmlCodeContent)
 		setPreviewContent(cssCodeContent, htmlCodeContent, jsCodeContent, previewElement)
 	})
 
@@ -149,7 +135,6 @@ export const setInitEditorContent = (
 	cssMonaco: monaco.editor.IStandaloneCodeEditor,
 	jsMonaco: monaco.editor.IStandaloneCodeEditor
 ) => {
-	console.log(url)
 	let css = ''
 	let html = ''
 	let js = ''
@@ -160,7 +145,6 @@ export const setInitEditorContent = (
 		html = rawHtml ? decode(rawHtml) : ''
 		css = rawCss ? decode(rawCss) : ''
 		js = rawJs ? decode(rawJs) : ''
-		console.log('asdas', html, css, js)
 		setPreviewContent(css, html, js, previewElement)
 
 		htmlMonaco.setValue(html)

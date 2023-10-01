@@ -31,19 +31,19 @@ import JsIcon from '../icon/JsIcon.astro'
 
 <div class='editor grid w-full overflow-y-scroll snap-y h-screen'>
   <div id='html-editor' class='relative h-full min-h-full w-full min-w-full'>
-    <HtmlIcon class='w-12 h-12 absolute z-10 bottom-0 right-0 mr-3 mb-1' />
+    <HtmlIcon class='w-12 h-12 absolute z-10 bottom-0 right-0 mr-3 mb-1 opacity-60' />
   </div>
   <div id='preview-editor' class='snap-start h-full min-h-full w-full min-w-full'>
     <iframe title='Preview' class='bg-black bg-opacity-80 w-full h-full border-0'></iframe>
   </div>
   <div id='js-editor' class='relative h-full min-h-full w-full min-w-full'>
-    <JsIcon class='w-11 h-11 absolute z-10 bottom-0 right-0 mr-5 mb-2' />
+    <JsIcon class='w-10 h-10 absolute z-10 bottom-0 right-0 mr-5 mb-2 opacity-60' />
   </div>
   <div id='css-editor' class='relative h-full min-h-full w-full min-w-full'>
-    <CssIcon class='w-12 h-12 absolute z-10 bottom-0 right-0 mr-4 mb-2' />
+    <CssIcon class='w-12 h-12 absolute z-10 bottom-0 right-0 mr-3 mb-1 opacity-60' />
   </div>
-  <div class='gutter-col gutter-col-1 border-none'></div>
-  <div class='gutter-row gutter-row-1 border-none'></div>
+  <div class='gutter-col gutter-col-1 bg-slate-50 opacity-30'></div>
+  <div class='gutter-row gutter-row-1 bg-slate-50 opacity-30'></div>
 </div>
 
 <style is:inline>
