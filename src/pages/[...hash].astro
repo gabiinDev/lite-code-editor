@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import EditorBoard from '../components/EditorBoard'
+import NavBar from '../components/NavBar'
 ---
 
 <Layout title='Lite Code Editor'>
-  <main class='h-full w-full'>
+  <main class='h-full w-full overflow-hidden'>
+    <NavBar client:only />
     <EditorBoard client:only />
   </main>
 </Layout>
