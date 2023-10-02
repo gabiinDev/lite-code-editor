@@ -15,7 +15,7 @@ export const MONACO_EDITOR_COMMON_OPTIONS: editor.IStandaloneEditorConstructionO
 	scrollBeyondLastLine: false,
 	roundedSelection: false,
 	padding: {
-		top: 16
+		top: 12
 	},
 	formatOnType: true,
 	formatOnPaste: true,
