@@ -104,7 +104,7 @@ export const EditorBoard = () => {
 	return (
 		<>
 			{editorsLoading && <Loading />}
-			<div class='editor grid w-full overflow-y-scroll snap-y h-screen'>
+			<div class='grid h-screen overflow-y-hidden snap-mandatory w-full'>
 				<HtmlEditorContent ref={htmlRef} elementId='html-editor' />
 				<PreviewContent elementId='preview' css={css} html={html} js={js} />
 				<JsEditorContent ref={jsRef} elementId='js-editor' />
