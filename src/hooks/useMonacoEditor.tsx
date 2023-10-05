@@ -49,7 +49,9 @@ const useMonacoEditor = ({ language, value, setContent, monacoInstance }: Props)
 	}
 
 	const setEditorValue = (value: string) => {
-		if (value !== '') editorInstanse?.setValue(value)
+		if (value !== '') {
+			editorInstanse?.setValue(value)
+		}
 	}
 
 	return { initEditor, setEditorValue }
