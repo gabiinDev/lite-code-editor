@@ -1,8 +1,20 @@
 import { decode, encode } from 'js-base64'
 
+import { type ExternalFrameworksOptions } from '../types/editor'
 const tailWindUrlScript = '<script src="https://cdn.tailwindcss.com"></script>'
 
-export const createHtmlTemplate = (css: string, html: string, js: string) => {
+export const createHtmlTemplate = (
+	css: string,
+	html: string,
+	js: string,
+	externalFramework: ExternalFrameworksOptions | null
+) => {
+	let selectedFramework = ''
+	switch (externalFramework) {
+		case 'tailwind':
+			selectedFramework = tailWindUrlScript
+	}
+
 	return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,6 +23,7 @@ export const createHtmlTemplate = (css: string, html: string, js: string) => {
     <style id="preview-style">
       ${css}
     </style>
+			${selectedFramework}
   </head>
   <body>
     ${html}

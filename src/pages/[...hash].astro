@@ -1,22 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import EditorBoard from '../components/EditorBoard'
+import NavBar from '../components/NavBar'
 ---
 
 <Layout title='Lite Code Editor'>
-  <main class='h-full w-full'>
+  <main>
+    <NavBar client:only />
     <EditorBoard client:only />
   </main>
 </Layout>
 
 <style is:inline>
-  .editor {
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - 75px);
-    scroll-snap-align: start;
-  }
-
   .grid {
     display: grid;
     grid-template-rows: 1fr 5px 1fr;
