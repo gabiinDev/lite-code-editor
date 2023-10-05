@@ -37,6 +37,7 @@ const setScriptToInitExternal = (value: AvaibableFrameworks | null) => {
 			window.NF = window.NF || {};
 		</script>`
 	}
+	return ''
 }
 
 export const createHtmlTemplate = (
@@ -47,7 +48,6 @@ export const createHtmlTemplate = (
 ) => {
 	const selectedFramework =
 		avaliableFrameworks.find(({ type }) => type === externalFramework) ?? null
-	console.log('selectedFramework', selectedFramework)
 	return `<!DOCTYPE html>
 <html lang="en">
   <head>
