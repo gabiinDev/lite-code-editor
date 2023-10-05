@@ -4,17 +4,17 @@ import { Drawer } from 'flowbite'
 import type { DrawerOptions, DrawerInterface } from 'flowbite'
 import OpenMenuButton from './OpenMenuButton'
 import CloseMenuButton from './CloseMenuButton'
-import TailwindButton from './TailwindButton'
-import NFButton from './NFButton'
-import BootstrapButton from './BootstrapButton'
-import FlowbiteButton from './FlowbiteButton'
-import SkypackButton from './SkypackButton'
 import MenuHeader from './MenuHeader'
 import { type ExternalFrameworksOptions } from '../types/editor'
-import { useCustomOptionsStore } from '../store/editorOptions'
+
+import { selectedExternalFramework } from '../store/menuStore'
+import { externalFrameworkOptions } from '../constants/options'
+import MenuItemButton from './MenuItemButton'
+
+import { useStore } from '@nanostores/preact'
 
 const NavBar = () => {
-	// const setExternalFramework = useCustomOptionsStore((state) => state.setExternalFramework)
+	const $selectedExternalFramework = useStore(selectedExternalFramework)
 	const drawerRef = useRef(null as unknown as HTMLDivElement)
 	const draweInterfaceRef = useRef(null as unknown as DrawerInterface)
 
@@ -27,8 +27,8 @@ const NavBar = () => {
 	}
 
 	const handleOptionClick = (selectedType: ExternalFrameworksOptions) => {
-		console.log('selectedType', selectedType)
-		// setExternalFramework(selectedType)
+		selectedExternalFramework.set(selectedType)
+		draweInterfaceRef.current.hide()
 	}
 
 	useEffect(() => {
@@ -64,30 +64,20 @@ const NavBar = () => {
 				aria-labelledby='drawer-top-label'
 			>
 				<div class='container m-auto grid-rows-2 h-44 place-content-center'>
-					<header class='pt-5 text-center'>
-						<h5
-							id='drawer-top-label'
-							class='w-full inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400'
-						>
-							<MenuHeader />
-						</h5>
-					</header>
+					<MenuHeader />
 					<ul class='pt-3 flex flex-row flex-wrap justify-center'>
-						<li class='mr-5'>
-							<TailwindButton optionType={'tailwind'} callbackClick={handleOptionClick} />
-						</li>
-						<li class='mb-6 text-sm text-gray-500 dark:text-gray-400 mr-5'>
-							<NFButton />
-						</li>
-						<li class='mb-6 text-sm text-gray-500 dark:text-gray-400 mr-5'>
-							<BootstrapButton />
-						</li>
-						<li class='mb-6 text-sm text-gray-500 dark:text-gray-400 mr-5'>
-							<FlowbiteButton />
-						</li>
-						<li class='mb-6 text-sm text-gray-500 dark:text-gray-400'>
-							<SkypackButton />
-						</li>
+						{externalFrameworkOptions.map((item) => {
+							return (
+								<li class='mb-6 text-sm text-gray-500 dark:text-gray-400 mr-5'>
+									<MenuItemButton
+										optionType={item.option}
+										callbackClick={handleOptionClick}
+										title={item.name}
+										isActive={$selectedExternalFramework === item.option}
+									/>
+								</li>
+							)
+						})}
 					</ul>
 				</div>
 				<CloseMenuButton handleCloseClick={handleCloseClick} />

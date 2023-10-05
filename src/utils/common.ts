@@ -1,29 +1,64 @@
 import { decode, encode } from 'js-base64'
 
 import { type ExternalFrameworksOptions } from '../types/editor'
-const tailWindUrlScript = '<script src="https://cdn.tailwindcss.com"></script>'
+
+const tailWindUrlScript = 'https://cdn.tailwindcss.com'
+const natalFrameworkUrlScript = 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.js'
+const natalFrameworkUrlCss = 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.css'
+
+interface AvaibableFrameworks {
+	type: ExternalFrameworksOptions
+	url: string
+}
+
+const avaliableFrameworks: Array<AvaibableFrameworks> = [
+	{ type: 'default', url: '' },
+	{ type: 'tailwind', url: tailWindUrlScript },
+	{ type: 'natal-framework', url: natalFrameworkUrlScript }
+]
+
+const getScriptTag = (value: AvaibableFrameworks | null) => {
+	if (!value?.type || value?.url === '') return ''
+
+	if (value?.type === 'tailwind') {
+		return `<script src="${value.url}"></script>`
+	}
+	return `<script defer type="module" src="${value.url}"></script>`
+}
+
+const getLinkTag = (urlLink?: string) => {
+	const value = urlLink ? `<link rel="stylesheet" type="text/css" href="${urlLink}"></link>` : ''
+	return value
+}
+
+const setScriptToInitExternal = (value: AvaibableFrameworks | null) => {
+	if (value?.type === 'natal-framework') {
+		return `<script defer type="text/javascript">
+			window.NF = window.NF || {};
+		</script>`
+	}
+	return ''
+}
 
 export const createHtmlTemplate = (
 	css: string,
 	html: string,
 	js: string,
-	externalFramework: ExternalFrameworksOptions | null
+	externalFramework: ExternalFrameworksOptions
 ) => {
-	let selectedFramework = ''
-	switch (externalFramework) {
-		case 'tailwind':
-			selectedFramework = tailWindUrlScript
-	}
-
+	const selectedFramework =
+		avaliableFrameworks.find(({ type }) => type === externalFramework) ?? null
 	return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style id="preview-style">
+    <style>
       ${css}
     </style>
-			${selectedFramework}
+			${selectedFramework?.type === 'natal-framework' ? getLinkTag(natalFrameworkUrlCss) : ''}
+			${getScriptTag(selectedFramework)}
+			${setScriptToInitExternal(selectedFramework)}
   </head>
   <body>
     ${html}
