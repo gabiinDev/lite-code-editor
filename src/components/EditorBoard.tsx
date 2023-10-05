@@ -22,9 +22,6 @@ interface ReferenceHTMLElement extends JSX.Element {
 }
 
 export const EditorBoard = () => {
-	const [css, setCss] = useState('')
-	const [html, setHtml] = useState('')
-	const [js, setJs] = useState('')
 	const [editorsLoading, setEditorsLoading] = useState(true)
 
 	const initSplit = useSplit()
@@ -37,20 +34,17 @@ export const EditorBoard = () => {
 
 	const cssEditor = useMonacoEditor({
 		language: 'css',
-		value: css,
-		setContent: setCss,
+		value: '',
 		monacoInstance: monaco
 	})
 	const htmlEditor = useMonacoEditor({
 		language: 'html',
-		value: html,
-		setContent: setHtml,
+		value: '',
 		monacoInstance: monaco
 	})
 	const jsEditor = useMonacoEditor({
 		language: 'javascript',
-		value: js,
-		setContent: setJs,
+		value: '',
 		monacoInstance: monaco
 	})
 
@@ -83,9 +77,9 @@ export const EditorBoard = () => {
 			const url = window.location.pathname
 			const { hasAnyContent, decodedCss, decodedHtml, decodedJs } = handleHashedUrl(url)
 			if (hasAnyContent) {
-				setCss(decodedCss)
-				setHtml(decodedHtml)
-				setJs(decodedJs)
+				cssEditor.setContent(decodedCss)
+				htmlEditor.setContent(decodedHtml)
+				jsEditor.setContent(decodedJs)
 				cssEditor.setEditorValue(decodedCss)
 				htmlEditor.setEditorValue(decodedHtml)
 				jsEditor.setEditorValue(decodedJs)
@@ -98,15 +92,20 @@ export const EditorBoard = () => {
 		}
 	}, [])
 	useEffect(() => {
-		handleUpdateUrl(css, html, js)
-	}, [css, html, js])
+		handleUpdateUrl(cssEditor.content, htmlEditor.content, jsEditor.content)
+	}, [cssEditor.content, htmlEditor.content, jsEditor.content])
 
 	return (
 		<>
 			{editorsLoading && <Loading />}
 			<div class='grid h-screen overflow-y-hidden snap-mandatory w-full'>
 				<HtmlEditorContent ref={htmlRef} elementId='html-editor' />
-				<PreviewContent elementId='preview' css={css} html={html} js={js} />
+				<PreviewContent
+					elementId='preview'
+					css={cssEditor.content}
+					html={htmlEditor.content}
+					js={jsEditor.content}
+				/>
 				<JsEditorContent ref={jsRef} elementId='js-editor' />
 				<CssEditorContent ref={cssRef} elementId='css-editor' />
 				<div ref={gutterColRef} class='gutter-col gutter-col-1 bg-slate-50 opacity-30'></div>
