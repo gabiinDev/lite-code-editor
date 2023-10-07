@@ -4,7 +4,7 @@ import type { JSX } from 'preact/jsx-runtime'
 import { createHtmlTemplate } from '../utils/common'
 import { useEffect, useState } from 'preact/hooks'
 import { useStore } from '@nanostores/preact'
-import { selectedExternalFramework } from '../store/menuStore'
+import { selectedExternalFramework, selectedExternalFrameworkCssVariant } from '../store/menuStore'
 
 export interface Props {
 	elementId: string
@@ -16,16 +16,31 @@ export interface Props {
 
 const PreviewContent = ({ elementId, css, html, js, title = 'Preview' }: Props): JSX.Element => {
 	const $selectedExternalFramework = useStore(selectedExternalFramework)
+	const $selectedExternalFrameworkCssVariant = useStore(selectedExternalFrameworkCssVariant)
 	const [iFrameContent, setIFrameContent] = useState('')
 	const [iFrameTitle, setIFrameTitle] = useState(title)
 
-	useEffect(() => {
+	const handlePreviewHtml = () => {
 		const htmlParsed = html ?? ''
 		const cssParsed = css ?? ''
 		const jsParsed = js ?? ''
-		const template = createHtmlTemplate(cssParsed, htmlParsed, jsParsed, $selectedExternalFramework)
+		const template = createHtmlTemplate(
+			cssParsed,
+			htmlParsed,
+			jsParsed,
+			$selectedExternalFramework,
+			$selectedExternalFrameworkCssVariant
+		)
 		setIFrameContent(template)
-	}, [css, html, js, $selectedExternalFramework])
+	}
+
+	useEffect(() => {
+		handlePreviewHtml()
+	}, [css, html, js])
+
+	useEffect(() => {
+		handlePreviewHtml()
+	}, [$selectedExternalFramework.type, $selectedExternalFrameworkCssVariant?.name])
 
 	useEffect(() => {
 		setIFrameTitle(title)

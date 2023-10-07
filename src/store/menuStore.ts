@@ -1,10 +1,9 @@
 import { atom } from 'nanostores'
 
-import { type ExternalFrameworksOptions } from '../types/editor'
+import type { ExternalFrameworks, ExternalFrameworksOptionsCssVariants } from '../types/editor'
+import { defaultFramework } from '../constants/externalFrameworks'
 
-// interface CustomOptionsState {
-// 	selectedExternalFramework: ExternalFrameworksOptions | null
-// 	setExternalFramework: (externalFramework: ExternalFrameworksOptions) => void
-// }
-
-export const selectedExternalFramework = atom<ExternalFrameworksOptions>('default')
+export const selectedExternalFramework = atom<ExternalFrameworks>(defaultFramework)
+export const selectedExternalFrameworkCssVariant = atom<
+	ExternalFrameworksOptionsCssVariants | undefined
+>()

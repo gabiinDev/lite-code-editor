@@ -1,7 +1,7 @@
 import * as monaco from 'monaco-editor'
 import { emmetHTML } from 'emmet-monaco-es'
 
-import { useState, type StateUpdater } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 
 import { MONACO_EDITOR_COMMON_OPTIONS } from '../constants/monacoEditor'
 import { buildCompletionList, getMatchingTagName } from '../utils/monaco'

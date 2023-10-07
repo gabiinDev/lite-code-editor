@@ -6,15 +6,20 @@ const MenuHeader = () => {
 				class='w-full inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400'
 			>
 				<svg
-					class='w-4 h-4 mr-2.5'
-					aria-hidden='true'
 					xmlns='http://www.w3.org/2000/svg'
-					fill='currentColor'
-					viewBox='0 0 20 20'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke-width='1.5'
+					stroke='currentColor'
+					class='w-8 h-8 mr-2.5'
 				>
-					<path d='M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z' />
+					<path
+						stroke-linecap='round'
+						stroke-linejoin='round'
+						d='M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z'
+					/>
 				</svg>
-				Menu
+				Options
 			</h5>
 		</header>
 	)
