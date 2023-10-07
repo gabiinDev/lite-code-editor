@@ -32,10 +32,12 @@ const useMonacoEditor = ({ language, value, monacoInstance }: Props) => {
 					value,
 					...MONACO_EDITOR_COMMON_OPTIONS
 				})
-				editorInstanse.onDidChangeModelContent(() => {
-					const content = editorInstanse?.getValue() ?? ''
-					setContent(content)
-				})
+				editorInstanse.onDidChangeModelContent(
+					debounce(() => {
+						const content = editorInstanse?.getValue() ?? ''
+						setContent(content)
+					}, 500)
+				)
 
 				initExtraSettings(language, monacoInstance)
 				editorInstanse?.onDidChangeModelLanguageConfiguration(() => {
