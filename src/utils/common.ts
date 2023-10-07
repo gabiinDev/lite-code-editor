@@ -1,23 +1,12 @@
 import { decode, encode } from 'js-base64'
 
-import { type ExternalFrameworksOptions } from '../types/editor'
+import type {
+	ExternalFrameworks,
+	ExternalFrameworksOptions,
+	ExternalFrameworksOptionsCssVariants
+} from '../types/editor'
 
-const tailWindUrlScript = 'https://cdn.tailwindcss.com'
-const natalFrameworkUrlScript = 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.js'
-const natalFrameworkUrlCss = 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.css'
-
-interface AvaibableFrameworks {
-	type: ExternalFrameworksOptions
-	url: string
-}
-
-const avaliableFrameworks: Array<AvaibableFrameworks> = [
-	{ type: 'default', url: '' },
-	{ type: 'tailwind', url: tailWindUrlScript },
-	{ type: 'natal-framework', url: natalFrameworkUrlScript }
-]
-
-const getScriptTag = (value: AvaibableFrameworks | null) => {
+const getScriptTag = (value: ExternalFrameworks | null) => {
 	if (!value?.type || value?.url === '') return ''
 
 	if (value?.type === 'tailwind') {
@@ -27,11 +16,16 @@ const getScriptTag = (value: AvaibableFrameworks | null) => {
 }
 
 const getLinkTag = (urlLink?: string) => {
-	const value = urlLink ? `<link rel="stylesheet" type="text/css" href="${urlLink}"></link>` : ''
-	return value
+	if (urlLink) return `<link rel="stylesheet" type="text/css" href="${urlLink}"></link>`
+	return ''
 }
 
-const setScriptToInitExternal = (value: AvaibableFrameworks | null) => {
+const setCssVariant = (variant: ExternalFrameworksOptionsCssVariants | undefined): string => {
+	if (variant?.url) return getLinkTag(variant.url)
+	return ''
+}
+
+const setScriptToInitExternal = (value: ExternalFrameworks | null) => {
 	if (value?.type === 'natal-framework') {
 		return `<script defer type="text/javascript">
 			window.NF = window.NF || {};
@@ -44,21 +38,20 @@ export const createHtmlTemplate = (
 	css: string,
 	html: string,
 	js: string,
-	externalFramework: ExternalFrameworksOptions
+	externalFramework: ExternalFrameworks,
+	externalCssVariant: ExternalFrameworksOptionsCssVariants | undefined
 ) => {
-	const selectedFramework =
-		avaliableFrameworks.find(({ type }) => type === externalFramework) ?? null
 	return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
+			${setCssVariant(externalCssVariant)}
+		<style>
       ${css}
     </style>
-			${selectedFramework?.type === 'natal-framework' ? getLinkTag(natalFrameworkUrlCss) : ''}
-			${getScriptTag(selectedFramework)}
-			${setScriptToInitExternal(selectedFramework)}
+		${getScriptTag(externalFramework)}
+		${setScriptToInitExternal(externalFramework)}
   </head>
   <body>
     ${html}
@@ -69,8 +62,16 @@ export const createHtmlTemplate = (
 </html>`
 }
 
-export const handleUpdateUrl = (css: string, html: string, js: string) => {
-	const hashedCode = `${encode(html)}|${encode(css)}|${encode(js)}`
+export const handleUpdateUrl = (
+	css: string,
+	html: string,
+	js: string,
+	framework: ExternalFrameworksOptions,
+	cssVariant: string = ''
+) => {
+	const hashedCode = `${encode(html)}|${encode(css)}|${encode(js)}|${encode(framework)}|${encode(
+		cssVariant
+	)}`
 	window.history.replaceState(null, '', `/${hashedCode}`)
 }
 
@@ -78,14 +79,23 @@ export const handleHashedUrl = (url: string) => {
 	let decodedCss = ''
 	let decodedHtml = ''
 	let decodedJs = ''
+	let decodedFramework = ''
+	let decodedCssVariant = ''
 
 	if (!url.endsWith('/') && !url.endsWith('#') && url !== '/code') {
-		const [rawHtml, rawCss, rawJs] = url.slice(1).split('%7C')
+		const [rawHtml, rawCss, rawJs, rawFramework, rawCssVariant] = url.slice(1).split('%7C')
 
 		decodedCss = rawCss ? decode(rawCss) : ''
 		decodedHtml = rawHtml ? decode(rawHtml) : ''
 		decodedJs = rawJs ? decode(rawJs) : ''
+		decodedFramework = rawFramework ? decode(rawFramework) : ''
+		decodedCssVariant = rawCssVariant ? decode(rawCssVariant) : ''
 	}
-	const hasAnyContent = decodedCss !== '' || decodedHtml !== '' || decodedJs !== ''
-	return { hasAnyContent, decodedCss, decodedHtml, decodedJs }
+	const hasAnyContent =
+		decodedCss !== '' ||
+		decodedHtml !== '' ||
+		decodedJs !== '' ||
+		decodedFramework !== '' ||
+		decodedCssVariant !== ''
+	return { hasAnyContent, decodedCss, decodedHtml, decodedJs, decodedFramework, decodedCssVariant }
 }

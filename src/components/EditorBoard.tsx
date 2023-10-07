@@ -6,7 +6,10 @@ import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
 
+import { useStore } from '@nanostores/preact'
+
 import { handleHashedUrl, handleUpdateUrl } from '../utils/common'
+import { externalFrameworksSource } from '../constants/externalFrameworks'
 
 import CssEditorContent from './CssEditorContent'
 import HtmlEditorContent from './HtmlEditorContent'
@@ -17,11 +20,17 @@ import useSplit from '../hooks/useSplit'
 
 import Loading from './Loading'
 
+import { selectedExternalFramework, selectedExternalFrameworkCssVariant } from '../store/menuStore'
+import type { ExternalFrameworksOptions } from '../types/editor'
+
 interface ReferenceHTMLElement extends JSX.Element {
 	base: HTMLElement
 }
 
 export const EditorBoard = () => {
+	const $selectedExternalFramework = useStore(selectedExternalFramework)
+	const $selectedExternalFrameworkCssVariant = useStore(selectedExternalFrameworkCssVariant)
+
 	const [editorsLoading, setEditorsLoading] = useState(true)
 
 	const initSplit = useSplit()
@@ -75,7 +84,14 @@ export const EditorBoard = () => {
 			})
 
 			const url = window.location.pathname
-			const { hasAnyContent, decodedCss, decodedHtml, decodedJs } = handleHashedUrl(url)
+			const {
+				hasAnyContent,
+				decodedCss,
+				decodedHtml,
+				decodedJs,
+				decodedFramework,
+				decodedCssVariant
+			} = handleHashedUrl(url)
 			if (hasAnyContent) {
 				cssEditor.setContent(decodedCss)
 				htmlEditor.setContent(decodedHtml)
@@ -83,6 +99,20 @@ export const EditorBoard = () => {
 				cssEditor.setEditorValue(decodedCss)
 				htmlEditor.setEditorValue(decodedHtml)
 				jsEditor.setEditorValue(decodedJs)
+
+				if (decodedFramework && decodedFramework !== '') {
+					const selectedFramework = externalFrameworksSource.find(
+						(item) => item.type === (decodedFramework as ExternalFrameworksOptions)
+					)
+					selectedExternalFramework.set(selectedFramework!)
+
+					if (decodedCssVariant && decodedCssVariant !== '') {
+						const selectedCssVariant = selectedFramework?.cssVariants?.find(
+							(item) => item.type === decodedCssVariant
+						)
+						selectedExternalFrameworkCssVariant.set(selectedCssVariant)
+					}
+				}
 			}
 
 			initSplit({
@@ -92,8 +122,20 @@ export const EditorBoard = () => {
 		}
 	}, [])
 	useEffect(() => {
-		handleUpdateUrl(cssEditor.content, htmlEditor.content, jsEditor.content)
-	}, [cssEditor.content, htmlEditor.content, jsEditor.content])
+		handleUpdateUrl(
+			cssEditor.content,
+			htmlEditor.content,
+			jsEditor.content,
+			$selectedExternalFramework.type,
+			$selectedExternalFrameworkCssVariant?.type
+		)
+	}, [
+		cssEditor.content,
+		htmlEditor.content,
+		jsEditor.content,
+		$selectedExternalFramework.type,
+		$selectedExternalFrameworkCssVariant?.type
+	])
 
 	return (
 		<>

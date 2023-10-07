@@ -7,7 +7,7 @@ export const MONACO_EDITOR_COMMON_OPTIONS: editor.IStandaloneEditorConstructionO
 	wordWrap: 'on',
 	theme: 'vs-dark',
 	fontLigatures: 'on',
-	fontSize: 17,
+	fontSize: 15,
 	lineNumbers: 'off',
 	tabSize: 2,
 	automaticLayout: true,
