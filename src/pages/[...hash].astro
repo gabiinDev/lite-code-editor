@@ -14,8 +14,8 @@ import NavBar from '../components/NavBar'
 <style is:inline>
   .grid {
     display: grid;
-    grid-template-rows: 1fr 5px 1fr;
-    grid-template-columns: 1fr 5px 1fr;
+    grid-template-rows: 1fr 8px 1fr;
+    grid-template-columns: 1fr 8px 1fr;
   }
 
   .gutter-col {
@@ -34,5 +34,20 @@ import NavBar from '../components/NavBar'
 
   .gutter-row-1 {
     grid-row: 2;
+  }
+
+  #gutter-col {
+    cursor: col-resize;
+    background-repeat: no-repeat;
+    background-position: 50% center;
+    background-image: url('/assets/resizeY.png');
+  }
+
+  #gutter-row {
+    cursor: row-resize;
+    background-repeat: no-repeat;
+    background-position: 50% center;
+    background-image: url('/assets/resizeX.png');
+    transform: rotate(180deg);
   }
 </style>
