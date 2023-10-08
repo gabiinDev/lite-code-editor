@@ -31,7 +31,7 @@ export const EditorBoard = () => {
 	const $selectedExternalFramework = useStore(selectedExternalFramework)
 	const $selectedExternalFrameworkCssVariant = useStore(selectedExternalFrameworkCssVariant)
 
-	const [editorsLoading, setEditorsLoading] = useState(true)
+	const [editorsLoading, setEditorsLoading] = useState(false)
 
 	const initSplit = useSplit()
 	const gutterColRef = useRef(null as unknown as HTMLDivElement)
@@ -79,9 +79,7 @@ export const EditorBoard = () => {
 				cssEditor.initEditor({ element: cssRef.current.base }),
 				htmlEditor.initEditor({ element: htmlRef.current.base }),
 				jsEditor.initEditor({ element: jsRef.current.base })
-			]).then(() => {
-				setEditorsLoading(false)
-			})
+			]).then()
 
 			const url = window.location.pathname
 			const {
@@ -120,7 +118,9 @@ export const EditorBoard = () => {
 				gutterRowElement: gutterRowRef.current
 			})
 		}
+		setEditorsLoading(false)
 	}, [])
+
 	useEffect(() => {
 		handleUpdateUrl(
 			cssEditor.content,
@@ -150,8 +150,16 @@ export const EditorBoard = () => {
 				/>
 				<JsEditorContent ref={jsRef} elementId='js-editor' />
 				<CssEditorContent ref={cssRef} elementId='css-editor' />
-				<div ref={gutterColRef} class='gutter-col gutter-col-1 bg-slate-50 opacity-30'></div>
-				<div ref={gutterRowRef} class='gutter-row gutter-row-1 bg-slate-50 opacity-30'></div>
+				<div
+					ref={gutterColRef}
+					class='gutter-col gutter-col-1 bg-neutral-950'
+					id='gutter-col'
+				></div>
+				<div
+					ref={gutterRowRef}
+					class='gutter-row gutter-row-1 bg-neutral-950'
+					id='gutter-row'
+				></div>
 			</div>
 		</>
 	)
