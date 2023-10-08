@@ -11,7 +11,25 @@ const { title } = Astro.props
 <html lang='en' class='scroll-smooth dark'>
   <head>
     <meta charset='UTF-8' />
-    <meta name='description' content='Astro description' />
+    <meta property='og:title' content={title} />
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content='https://litecode.gabrieldiazdev.com/code' />
+    <meta
+      property='og:image'
+      content='https://litecode.gabrieldiazdev.com/assets/lite-code-editor.jpg'
+    />
+    <meta
+      property='og:image:secure_url'
+      content='https://litecode.gabrieldiazdev.com/assets/lite-code-editor.jpg'
+    />
+    <meta property='og:image:type' content='image/jpeg' />
+    <meta property='og:image:width' content='1200' />
+    <meta property='og:image:height' content='630' />
+    <meta property='og:image:alt' content={title} />
+    <meta
+      name='description'
+      content='Lite Code Editor. Fast and lightweight. Project for educational purposes.'
+    />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta name='generator' content={Astro.generator} />
