@@ -1,80 +1,101 @@
-import { ExternalFramework, type ExternalFrameworks } from '../types/editor'
+import type { IExternalFrameworkModel } from '../types/models/project/externalFrameworkModel'
 
-export const defaultFramework = new ExternalFramework({
-	default: true,
+export const defaultFramework: IExternalFrameworkModel = {
+	id: '1',
 	name: 'Default',
 	type: 'default',
-	url: ''
-})
+	url: null,
+	default: true,
+	cssVariants: null
+}
 
-const natalFramework = new ExternalFramework({
+const natalFramework: IExternalFrameworkModel = {
+	id: '2',
 	default: false,
 	name: 'Natal Framework',
 	type: 'natal-framework',
 	url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.js',
 	cssVariants: [
 		{
+			id: '1',
+			idExternalFramework: '2',
 			type: 'default',
-			parent: 'natal-framework',
 			name: 'Grupo Sancor Seguros',
-			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.css'
+			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf.min.css',
+			default: true
 		},
 		{
+			id: '2',
+			idExternalFramework: '2',
 			type: 'prevenet',
-			parent: 'natal-framework',
 			name: 'Prevenet',
-			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-pnet.min.css'
+			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-pnet.min.css',
+			default: false
 		},
 		{
+			id: '3',
+			idExternalFramework: '2',
 			type: 'intermediarios',
-			parent: 'natal-framework',
 			name: 'Intermediarios',
-			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-int.min.css'
+			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-int.min.css',
+			default: false
 		},
 		{
+			id: '4',
+			idExternalFramework: '2',
 			type: 'clientes-prestadores',
-			parent: 'natal-framework',
 			name: 'Clientes y Prestadores de Sancor Seguros',
-			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-cli.min.css'
+			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-cli.min.css',
+			default: false
 		},
 		{
+			id: '5',
+			idExternalFramework: '2',
 			type: 'prevencion-salud',
-			parent: 'natal-framework',
 			name: 'Prevención Salud',
-			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-ps.min.css'
+			url: 'https://natalfwk.gruposancorseguros.com/2.3.2/nf-ps.min.css',
+			default: false
 		}
 	]
-})
+}
 
-const tailwindFramework = new ExternalFramework({
+const tailwindFramework: IExternalFrameworkModel = {
+	id: '3',
 	default: false,
 	name: 'Tailwind CSS',
 	type: 'tailwind',
-	url: 'https://cdn.tailwindcss.com'
-})
+	url: 'https://cdn.tailwindcss.com',
+	cssVariants: null
+}
 
-const bootstrapFramework = new ExternalFramework({
+const bootstrapFramework: IExternalFrameworkModel = {
+	id: '4',
 	default: false,
 	name: 'Bootstrap',
 	type: 'bootstrap',
-	url: ''
-})
+	url: '',
+	cssVariants: null
+}
 
-const flowbiteFramework = new ExternalFramework({
+const flowbiteFramework: IExternalFrameworkModel = {
+	id: '5',
 	default: false,
 	name: 'Flowbite',
 	type: 'flowbite',
-	url: ''
-})
+	url: '',
+	cssVariants: null
+}
 
-const skypackFramework = new ExternalFramework({
+const skypackFramework: IExternalFrameworkModel = {
+	id: '6',
 	default: false,
 	name: 'Skypack',
 	type: 'skypack',
-	url: ''
-})
+	url: '',
+	cssVariants: null
+}
 
-export const externalFrameworksSource: Array<ExternalFrameworks> = [
+export const externalFrameworksSource: Array<IExternalFrameworkModel> = [
 	defaultFramework,
 	natalFramework,
 	tailwindFramework,

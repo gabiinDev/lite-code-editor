@@ -1,13 +1,19 @@
-import type { ExternalFrameworks } from '../types/editor'
+import type { IExternalFrameworkModel } from './models/project/externalFrameworkModel'
 
 export type MenuItemType = 'button' | 'dropdown'
 
 export interface MenuItem {
 	name: string
 	type: MenuItemType
-	externalFramework: ExternalFrameworks
+	externalFramework: IExternalFrameworkModel
 }
 
 export interface MenuOptions {
 	items: Array<MenuItem>
+}
+
+export type ProjectStateType = 'new' | 'edit'
+
+export interface ProjectState {
+	state: ProjectStateType
 }

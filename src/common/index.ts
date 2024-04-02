@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { decode, encode } from 'js-base64'
-
 import type {
-	ExternalFrameworks,
-	ExternalFrameworksOptions,
-	ExternalFrameworksOptionsCssVariants
-} from '../types/editor'
+	ExternalFrameworkTypes,
+	IExternalFrameworkModel
+} from '../types/models/project/externalFrameworkModel'
+import type { IExternalFrameworkCssVariantModel } from '../types/models/project/externalFrameworkCssVariantModel'
 
-const getScriptTag = (value: ExternalFrameworks | null) => {
-	if (!value?.type || value?.url === '') return ''
+const getScriptTag = (value: IExternalFrameworkModel | null) => {
+	if (!value?.type || !value?.url || value?.url === '') return ''
 
 	if (value?.type === 'tailwind') {
 		return `<script src="${value.url}"></script>`
@@ -20,12 +21,12 @@ const getLinkTag = (urlLink?: string) => {
 	return ''
 }
 
-const setCssVariant = (variant: ExternalFrameworksOptionsCssVariants | undefined): string => {
+const setCssVariant = (variant: IExternalFrameworkCssVariantModel | undefined): string => {
 	if (variant?.url) return getLinkTag(variant.url)
 	return ''
 }
 
-const setScriptToInitExternal = (value: ExternalFrameworks | null) => {
+const setScriptToInitExternal = (value: IExternalFrameworkModel | null) => {
 	if (value?.type === 'natal-framework') {
 		return `<script defer type="text/javascript">
 			window.NF = window.NF || {};
@@ -38,8 +39,8 @@ export const createHtmlTemplate = (
 	css: string,
 	html: string,
 	js: string,
-	externalFramework: ExternalFrameworks,
-	externalCssVariant: ExternalFrameworksOptionsCssVariants | undefined
+	externalFramework: IExternalFrameworkModel,
+	externalCssVariant?: IExternalFrameworkCssVariantModel
 ) => {
 	return `<!DOCTYPE html>
 <html lang="en">
@@ -66,7 +67,7 @@ export const handleUpdateUrl = (
 	css: string,
 	html: string,
 	js: string,
-	framework: ExternalFrameworksOptions,
+	framework: ExternalFrameworkTypes,
 	cssVariant: string = ''
 ) => {
 	const hashedCode = `${encode(html)}|${encode(css)}|${encode(js)}|${encode(framework)}|${encode(
@@ -82,7 +83,7 @@ export const handleHashedUrl = (url: string) => {
 	let decodedFramework = ''
 	let decodedCssVariant = ''
 
-	if (!url.endsWith('/') && !url.endsWith('#') && url !== '/code') {
+	if (!url.endsWith('/') && !url.endsWith('#') && url !== '/projects/new') {
 		const [rawHtml, rawCss, rawJs, rawFramework, rawCssVariant] = url.slice(1).split('%7C')
 
 		decodedCss = rawCss ? decode(rawCss) : ''
@@ -98,4 +99,18 @@ export const handleHashedUrl = (url: string) => {
 		decodedFramework !== '' ||
 		decodedCssVariant !== ''
 	return { hasAnyContent, decodedCss, decodedHtml, decodedJs, decodedFramework, decodedCssVariant }
+}
+
+export const slugify = (text: string) => {
+	if (!text) return ''
+	return text
+		.toLowerCase()
+		.trim()
+		.replace(/[^\w\s-]/g, '')
+		.replace(/[\s_-]+/g, '-')
+		.replace(/^-+|-+$/g, '')
+}
+
+export const buildURL = (pathToGo: string): string => {
+	return `${import.meta.env.BASE_URL}/${pathToGo}`
 }

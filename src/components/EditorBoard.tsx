@@ -6,32 +6,23 @@ import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
 
-import { useStore } from '@nanostores/preact'
-
-import { handleHashedUrl, handleUpdateUrl } from '../utils/common'
-import { externalFrameworksSource } from '../constants/externalFrameworks'
-
 import CssEditorContent from './CssEditorContent'
 import HtmlEditorContent from './HtmlEditorContent'
 import JsEditorContent from './JsEditorContent'
 import PreviewContent from './PreviewContent'
-import useMonacoEditor from '../hooks/useMonacoEditor'
+import useMonacoEditor, { type Language } from '../hooks/useMonacoEditor'
 import useSplit from '../hooks/useSplit'
 
 import Loading from './Loading'
-
-import { selectedExternalFramework, selectedExternalFrameworkCssVariant } from '../store/menuStore'
-import type { ExternalFrameworksOptions } from '../types/editor'
+import useProject from '../hooks/useProject'
 
 interface ReferenceHTMLElement extends JSX.Element {
 	base: HTMLElement
 }
 
 export const EditorBoard = () => {
-	const $selectedExternalFramework = useStore(selectedExternalFramework)
-	const $selectedExternalFrameworkCssVariant = useStore(selectedExternalFrameworkCssVariant)
-
 	const [editorsLoading, setEditorsLoading] = useState(false)
+	const { currentProject, hasCurrentProject, setCurrentProjectConfig } = useProject()
 
 	const initSplit = useSplit()
 	const gutterColRef = useRef(null as unknown as HTMLDivElement)
@@ -41,20 +32,35 @@ export const EditorBoard = () => {
 	const htmlRef = useRef(null as unknown as ReferenceHTMLElement)
 	const jsRef = useRef(null as unknown as ReferenceHTMLElement)
 
+	const handleDidChangeContentCallback = (content: string, language: Language) => {
+		if (currentProject?.config) {
+			if (language === 'css') currentProject.config.css = content
+			if (language === 'html') currentProject.config.html = content
+			if (language === 'javascript') currentProject.config.javascript = content
+
+			setCurrentProjectConfig(currentProject.config)
+		}
+	}
+
 	const cssEditor = useMonacoEditor({
 		language: 'css',
-		value: '',
-		monacoInstance: monaco
+		initContent: currentProject?.config?.css || '',
+		monacoInstance: monaco,
+		onDidChangeContentCallback: handleDidChangeContentCallback
 	})
+
 	const htmlEditor = useMonacoEditor({
 		language: 'html',
-		value: '',
-		monacoInstance: monaco
+		initContent: currentProject?.config?.html ?? '',
+		monacoInstance: monaco,
+		onDidChangeContentCallback: handleDidChangeContentCallback
 	})
+
 	const jsEditor = useMonacoEditor({
 		language: 'javascript',
-		value: '',
-		monacoInstance: monaco
+		initContent: currentProject?.config?.javascript ?? '',
+		monacoInstance: monaco,
+		onDidChangeContentCallback: handleDidChangeContentCallback
 	})
 
 	useEffect(() => {
@@ -81,37 +87,9 @@ export const EditorBoard = () => {
 				jsEditor.initEditor({ element: jsRef.current.base })
 			]).then()
 
-			const url = window.location.pathname
-			const {
-				hasAnyContent,
-				decodedCss,
-				decodedHtml,
-				decodedJs,
-				decodedFramework,
-				decodedCssVariant
-			} = handleHashedUrl(url)
-			if (hasAnyContent) {
-				cssEditor.setContent(decodedCss)
-				htmlEditor.setContent(decodedHtml)
-				jsEditor.setContent(decodedJs)
-				cssEditor.setEditorValue(decodedCss)
-				htmlEditor.setEditorValue(decodedHtml)
-				jsEditor.setEditorValue(decodedJs)
-
-				if (decodedFramework && decodedFramework !== '') {
-					const selectedFramework = externalFrameworksSource.find(
-						(item) => item.type === (decodedFramework as ExternalFrameworksOptions)
-					)
-					selectedExternalFramework.set(selectedFramework!)
-
-					if (decodedCssVariant && decodedCssVariant !== '') {
-						const selectedCssVariant = selectedFramework?.cssVariants?.find(
-							(item) => item.type === decodedCssVariant
-						)
-						selectedExternalFrameworkCssVariant.set(selectedCssVariant)
-					}
-				}
-			}
+			cssEditor.setEditorValue(currentProject?.config?.css ?? '')
+			htmlEditor.setEditorValue(currentProject?.config?.html ?? '')
+			jsEditor.setEditorValue(currentProject?.config?.javascript ?? '')
 
 			initSplit({
 				gutterColElement: gutterColRef.current,
@@ -119,35 +97,14 @@ export const EditorBoard = () => {
 			})
 		}
 		setEditorsLoading(false)
-	}, [])
-
-	useEffect(() => {
-		handleUpdateUrl(
-			cssEditor.content,
-			htmlEditor.content,
-			jsEditor.content,
-			$selectedExternalFramework.type,
-			$selectedExternalFrameworkCssVariant?.type
-		)
-	}, [
-		cssEditor.content,
-		htmlEditor.content,
-		jsEditor.content,
-		$selectedExternalFramework.type,
-		$selectedExternalFrameworkCssVariant?.type
-	])
+	}, [currentProject?.id])
 
 	return (
 		<>
-			{editorsLoading && <Loading />}
+			{editorsLoading && !hasCurrentProject && <Loading />}
 			<div class='grid h-screen overflow-y-hidden snap-mandatory w-full'>
 				<HtmlEditorContent ref={htmlRef} elementId='html-editor' />
-				<PreviewContent
-					elementId='preview'
-					css={cssEditor.content}
-					html={htmlEditor.content}
-					js={jsEditor.content}
-				/>
+				<PreviewContent elementId='preview' />
 				<JsEditorContent ref={jsRef} elementId='js-editor' />
 				<CssEditorContent ref={cssRef} elementId='css-editor' />
 				<div

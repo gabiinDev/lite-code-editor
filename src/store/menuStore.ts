@@ -1,9 +1,21 @@
 import { atom } from 'nanostores'
+import type { MenuItem } from '../types/menuOptions'
 
-import type { ExternalFrameworks, ExternalFrameworksOptionsCssVariants } from '../types/editor'
-import { defaultFramework } from '../constants/externalFrameworks'
+const menuExternalFrameworksStore = atom<MenuItem[] | null>(null)
 
-export const selectedExternalFramework = atom<ExternalFrameworks>(defaultFramework)
-export const selectedExternalFrameworkCssVariant = atom<
-	ExternalFrameworksOptionsCssVariants | undefined
->()
+const setMenuExternalFrameworksStore = (value: MenuItem[] | null) => {
+	menuExternalFrameworksStore.set(value)
+}
+
+const menuOpenStore = atom(false)
+
+const setMenuOpenStore = (value: boolean) => {
+	menuOpenStore.set(value)
+}
+
+export {
+	menuExternalFrameworksStore,
+	setMenuExternalFrameworksStore,
+	menuOpenStore,
+	setMenuOpenStore
+}

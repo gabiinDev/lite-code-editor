@@ -1,25 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as monaco from 'monaco-editor'
 import { emmetHTML } from 'emmet-monaco-es'
 
-import { useState } from 'preact/hooks'
-
 import { MONACO_EDITOR_COMMON_OPTIONS } from '../constants/monacoEditor'
-import { buildCompletionList, getMatchingTagName } from '../utils/monaco'
-import { debounce } from '../utils/debounce'
+import { buildCompletionList, getMatchingTagName } from '../common/monaco'
+import { debounce } from '../common/debounce'
 
 export type Language = 'html' | 'css' | 'javascript'
 
 export interface Props {
 	language: Language
-	value: string
+	initContent?: string
 	monacoInstance: typeof monaco
+	onDidChangeContentCallback: (content: string, language: Language) => void
 }
 
-const useMonacoEditor = ({ language, value, monacoInstance }: Props) => {
-	const [content, setContent] = useState(value)
+export interface IInitEditor {
+	element: HTMLElement
+}
+
+const useMonacoEditor = ({
+	language,
+	initContent = '',
+	monacoInstance,
+	onDidChangeContentCallback
+}: Props) => {
 	let editorInstanse = null as null | monaco.editor.IStandaloneCodeEditor
 
-	const initEditor = ({ element }: { element: HTMLElement }): Promise<any> => {
+	const initEditor = ({ element }: IInitEditor): Promise<any> => {
 		return new Promise((resolve, reject) => {
 			try {
 				monacoInstance.editor.getEditors().forEach((editor) => {
@@ -29,14 +37,13 @@ const useMonacoEditor = ({ language, value, monacoInstance }: Props) => {
 				})
 				editorInstanse = monacoInstance.editor.create(element, {
 					language,
-					value,
+					value: initContent,
 					...MONACO_EDITOR_COMMON_OPTIONS
 				})
 				editorInstanse.onDidChangeModelContent(
 					debounce(() => {
-						const content = editorInstanse?.getValue() ?? ''
-						setContent(content)
-					}, 500)
+						onDidChangeContentCallback(editorInstanse?.getValue() ?? '', language)
+					}, 700)
 				)
 
 				initExtraSettings(language, monacoInstance)
@@ -56,7 +63,7 @@ const useMonacoEditor = ({ language, value, monacoInstance }: Props) => {
 		}
 	}
 
-	return { initEditor, setEditorValue, content, setContent }
+	return { initEditor, setEditorValue }
 }
 
 const initExtraSettings = (language: Language, monacoInstance: typeof monaco) => {

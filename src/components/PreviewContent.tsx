@@ -1,59 +1,56 @@
 // css: string, html: string, js: string, previewElement: HTMLElement
 
 import type { JSX } from 'preact/jsx-runtime'
-import { createHtmlTemplate } from '../utils/common'
+import { createHtmlTemplate } from '../common'
 import { useEffect, useState } from 'preact/hooks'
-import { useStore } from '@nanostores/preact'
-import { selectedExternalFramework, selectedExternalFrameworkCssVariant } from '../store/menuStore'
+import useProject from '../hooks/useProject'
+import { EXTERNAL_FRAMEWORK_DEFAULT } from '../types/models/project/externalFrameworkModel'
 
 export interface Props {
 	elementId: string
-	css: string
-	html: string
-	js: string
-	title?: string
 }
 
-const PreviewContent = ({ elementId, css, html, js, title = 'Preview' }: Props): JSX.Element => {
-	const $selectedExternalFramework = useStore(selectedExternalFramework)
-	const $selectedExternalFrameworkCssVariant = useStore(selectedExternalFrameworkCssVariant)
+const PreviewContent = ({ elementId }: Props): JSX.Element => {
 	const [iFrameContent, setIFrameContent] = useState('')
-	const [iFrameTitle, setIFrameTitle] = useState(title)
+	const { currentProject } = useProject()
 
 	const handlePreviewHtml = () => {
-		const htmlParsed = html ?? ''
-		const cssParsed = css ?? ''
-		const jsParsed = js ?? ''
-		const template = createHtmlTemplate(
-			cssParsed,
-			htmlParsed,
-			jsParsed,
-			$selectedExternalFramework,
-			$selectedExternalFrameworkCssVariant
-		)
-		setIFrameContent(template)
+		if (currentProject && currentProject?.config) {
+			const { css, html, javascript, externalFramework, selectedExternalFrameworkCss } =
+				currentProject.config
+			const template = createHtmlTemplate(
+				css ?? '',
+				html ?? '',
+				javascript ?? '',
+				externalFramework ?? EXTERNAL_FRAMEWORK_DEFAULT,
+				selectedExternalFrameworkCss
+			)
+			setIFrameContent(template)
+		}
 	}
 
 	useEffect(() => {
-		handlePreviewHtml()
-	}, [css, html, js])
-
-	useEffect(() => {
-		handlePreviewHtml()
-	}, [$selectedExternalFramework.type, $selectedExternalFrameworkCssVariant?.name])
-
-	useEffect(() => {
-		setIFrameTitle(title)
-	}, [title])
+		if (currentProject && currentProject?.config) handlePreviewHtml()
+	}, [
+		currentProject?.config?.css,
+		currentProject?.config?.html,
+		currentProject?.config?.javascript,
+		currentProject?.config?.externalFramework?.type,
+		currentProject?.config?.selectedExternalFrameworkCss?.type,
+		currentProject?.name
+	])
 
 	return (
 		<div id={elementId} class='snap-start h-full min-h-full w-full min-w-full'>
 			<iframe
-				title={iFrameTitle}
+				title={currentProject?.name ?? 'lite code editor'}
 				class='bg-white w-full h-full border-0'
 				srcdoc={iFrameContent}
-				allow='midi; geolocation; microphone; camera; display-capture; encrypted-media; clipboard-read; clipboard-write; notifications; persistent-storage; background-sync; ambient-light-sensor; accessibility-events;'
+				allow='midi; geolocation; microphone; camera; display-capture; encrypted-media; clipboard-read; clipboard-write;'
 				sandbox='allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation allow-downloads'
+				loading='lazy'
+				allowFullScreen={true}
+				name='lite code preview'
 			></iframe>
 		</div>
 	)

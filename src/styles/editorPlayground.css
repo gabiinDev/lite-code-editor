@@ -1,17 +1,3 @@
----
-import Layout from '../layouts/Layout.astro'
-import EditorBoard from '../components/EditorBoard'
-import NavBar from '../components/NavBar'
----
-
-<Layout title='Lite Code Editor'>
-  <main>
-    <NavBar client:only />
-    <EditorBoard client:only />
-  </main>
-</Layout>
-
-<style is:inline>
   .grid {
     display: grid;
     grid-template-rows: 1fr 8px 1fr;
@@ -50,4 +36,3 @@ import NavBar from '../components/NavBar'
     background-image: url('/assets/resizeX.png');
     transform: rotate(180deg);
   }
-</style>

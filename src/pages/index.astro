@@ -1,10 +1,13 @@
 ---
-import Landing from '../components/Landing.astro'
+import Landing from '../components/Landing'
 import Layout from '../layouts/Layout.astro'
+
+const sessionUser = Astro.locals.user
+console.log('sessionUser', sessionUser)
 ---
 
 <Layout title='Lite Code Editor'>
   <main class='grid grid-rows-[auto] container m-auto'>
-    <Landing />
+    <Landing client:load />
   </main>
 </Layout>
