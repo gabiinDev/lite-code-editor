@@ -63,7 +63,11 @@ const useMonacoEditor = ({
 		}
 	}
 
-	return { initEditor, setEditorValue }
+	const formatCode = () => {
+		editorInstanse?.getAction('editor.action.formatDocument')?.run()
+	}
+
+	return { initEditor, setEditorValue, formatCode }
 }
 
 const initExtraSettings = (language: Language, monacoInstance: typeof monaco) => {

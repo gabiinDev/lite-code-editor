@@ -1,5 +1,6 @@
 /* eslint-disable multiline-ternary */
 import useProject from '../hooks/useProject'
+// import useToast from '../hooks/useToast'
 import { PROJECTS_BASE_URL } from '../types/models/project/projectModel'
 
 const OptionIcon = () => {
@@ -22,19 +23,22 @@ const OptionIcon = () => {
 }
 
 const MenuAside = () => {
+	// const { toastHtmlElement, showToast, setShowToast } = useToast()
 	const { hasCurrentProject, currentProject } = useProject()
+
 	const handleShareClick = () => {
 		if (hasCurrentProject && (currentProject?.id?.length ?? 0) > 0) {
 			const url = `${PROJECTS_BASE_URL}/${currentProject?.slug}`
-			console.log('url', url)
 			navigator.clipboard.writeText(url).then(
 				() => {
 					/* clipboard successfully set */
-					console.log('copied!')
+					// console.log('copied!')
+					// setShowToast(true)
 				},
 				() => {
 					/* clipboard write failed */
-					console.log('copied fail!')
+					// console.log('copied fail!')
+					// setShowToast(false)
 				}
 			)
 		}
@@ -61,6 +65,8 @@ const MenuAside = () => {
 					{hasCurrentProject && (currentProject?.id?.length ?? 0) > 0 ? (
 						<li class='mb-1'>
 							<button
+								as={'a'}
+								id='share-button'
 								title='Copy url to Clipboard and share project'
 								onClick={handleShareClick}
 								className='block text-sm hover:text-white'
@@ -71,6 +77,7 @@ const MenuAside = () => {
 					) : null}
 				</ul>
 			</nav>
+			{/* {showToast ? toastHtmlElement : null} */}
 		</aside>
 	)
 }

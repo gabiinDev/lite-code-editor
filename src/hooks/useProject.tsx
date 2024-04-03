@@ -19,28 +19,24 @@ const useProject = () => {
 	const [getingProject, setGetingProject] = useState(false)
 
 	const setCurrentProject = (project: IProjectModel) => {
-		console.log('setCurrentProject')
 		setCurrentProjectStore(project)
 	}
 
 	const setDefaultCurrentProject = () => {
-		console.log('setDefaultCurrentProject')
 		setCurrentProject(PROJECT_DEFAULT_TEMPLATE)
 		setGetingProject(false)
 	}
 
 	const setCurrentProjectConfig = (config: IProjectConfigModel) => {
-		console.log('setCurrentProjectConfig')
 		setCurrentProjectConfigStore(config)
 	}
 
 	const cleanCurrentProject = () => {
-		console.log('cleanCurrentProject')
 		setDefaultCurrentProject()
 		setHasCurrentProjectStore(false)
 	}
 
-	const addEditProject = async (): Promise<boolean> => {
+	const addEditProject = async (): Promise<string> => {
 		setSavingProject(true)
 		const data = await fetch('/api/project', {
 			method: 'POST',
@@ -51,12 +47,13 @@ const useProject = () => {
 		})
 
 		if (data.ok) {
+			const { slug } = await data.json()
 			setSavingProject(false)
-			return true
+			return slug
 		}
 
 		setSavingProject(false)
-		return false
+		return currentProject?.slug ?? ''
 	}
 
 	const getUserProyects = async () => {
@@ -72,7 +69,6 @@ const useProject = () => {
 	}
 
 	const setProjectFromSlug = async (slug: string): Promise<boolean> => {
-		console.log('setProjectFromSlug')
 		setGetingProject(true)
 		try {
 			const data = await fetch('/api/project/' + slug)

@@ -60,11 +60,11 @@ const NavBar = () => {
 
 			<nav
 				ref={drawerElementRef}
-				className='fixed top-0 left-0 right-0 z-40 w-full p-4 transition-transform -translate-y-full bg-white dark:bg-gray-800 rounded-b-lg shadow-black h-[30%]'
+				className='fixed top-0 left-0 right-0 z-40 w-full p-4 transition-transform -translate-y-full bg-white dark:bg-gray-800 rounded-b-lg shadow-black h-[38%]'
 				tabindex={-1}
 			>
 				<div className='container mx-auto'>
-					<div className='flex w-full justify-between items-center gap-2 pt-5'>
+					<div className='flex w-full justify-between items-center gap-2 pt-5 mb-5'>
 						<div className='mr-auto'>
 							<MenuAside />
 						</div>

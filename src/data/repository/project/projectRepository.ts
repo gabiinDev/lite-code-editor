@@ -136,15 +136,9 @@ export async function updateProjectCommand(
 }
 
 export async function getProjectBySlugQuery(
-	userId: string,
 	slug: string
 ): Promise<IRepositoryResult<IGetProjectsQueryResult | null>> {
 	try {
-		// validate correct userId
-		if (userId === null || userId === 'undefined' || userId === '') {
-			return RepositoryResponse.validationError('Usuario incorrecto')
-		}
-
 		// validate correct slug
 		if (slug === null || slug === 'undefined' || slug === '') {
 			return RepositoryResponse.validationError('Slug incorrecto')
@@ -159,7 +153,7 @@ export async function getProjectBySlugQuery(
 			.from(Project)
 			.innerJoin(ProjectType, eq(Project.id_type, ProjectType.id))
 			.innerJoin(ProjectConfig, eq(Project.id, ProjectConfig.id_project))
-			.where(and(eq(Project.id_user, userId), eq(Project.slug, slug)))
+			.where(eq(Project.slug, slug))
 			.all()
 
 		if (!queryResults || !queryResults?.at(0)) {

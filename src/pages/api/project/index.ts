@@ -2,7 +2,8 @@ import type { APIContext, APIRoute } from 'astro'
 import { ApiResponse } from '../../../types/connection/apiResponse'
 import {
 	getProjectsService,
-	saveOrUpdateProjectsService
+	saveOrUpdateProjectsService,
+	type ISaveOrUpdateProjectResponse
 } from '../../../services/project/projectService'
 import type { IProjectModel } from '../../../types/models/project/projectModel'
 
@@ -15,17 +16,15 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 
 	const dataFormBody: IProjectModel = await context.request.json()
 	if (!dataFormBody) return ApiResponse.error('no data content')
-	await saveOrUpdateProjectsService({ ...dataFormBody, idUser: userId })
-	return ApiResponse.success(null)
+	const response = await saveOrUpdateProjectsService({ ...dataFormBody, idUser: userId })
+	return ApiResponse.success<ISaveOrUpdateProjectResponse | null>({
+		slug: response.data?.slug ?? ''
+	})
 }
 
 export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
 	const userId = context.locals.user?.id ?? null
-
-	console.log('desde api', userId)
-
 	if (!userId) {
-		console.log('SIN AUTORIZAR')
 		return ApiResponse.unAuthorized()
 	}
 

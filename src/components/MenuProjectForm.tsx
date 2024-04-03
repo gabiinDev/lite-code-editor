@@ -7,6 +7,7 @@ import { useStore } from '@nanostores/preact'
 import useUser from '../hooks/useUser'
 import useProject from '../hooks/useProject'
 import Loading from './Loading'
+import { PROJECTS_BASE_ROUTE } from '../types/models/project/projectModel'
 // import useAceptOrCancelModal from '../hooks/useAceptOrCancelModal'
 
 const MenuProjectForm = () => {
@@ -33,42 +34,47 @@ const MenuProjectForm = () => {
 
 	const saveChanges = async () => {
 		if (isLoggedIn && currentProject && currentProject?.config) {
+			let slug = ''
+
+			setIsEditing(false)
 			if (currentProject?.id?.length > 0) {
 				// show confirmation dialog
 				// to edit project data
 				// showConfirm()
-				console.log('dialog showwwwwww')
+				slug = await addEditProject()
 			} else {
 				setIsEditing(false)
 				currentProject.name = inputRef.current.value
 				setCurrentProject(currentProject)
-				await addEditProject()
+				slug = await addEditProject()
+			}
+
+			if (slug && slug !== '' && slug !== currentProject?.slug) {
+				window.location.href = `${PROJECTS_BASE_ROUTE}/${slug}`
 			}
 		}
 	}
 
-	// const handleSaveKeyCombination = async (e: KeyboardEvent) => {
-	// 	if (isLoggedIn && e.ctrlKey && e.key === 's') {
-	// 		e.preventDefault()
-	// 		await saveChanges()
-	// 	}
-	// }
+	const handleSaveKeyCombination = async (e: KeyboardEvent) => {
+		if (isLoggedIn && e.ctrlKey && e.key === 's') {
+			e.preventDefault()
+			if (currentProject && currentProject?.id?.length > 0) await saveChanges()
+		}
+	}
 
 	// const showConfirm = () => {
 	// 	showModal('¿Esta seguro que desea sobreescribir los cambios?')
 	// }
 
-	// useEffect(() => {
-	// 	if (hasCurrentProject) {
-	// 		console.log('set event listener')
-	// 		// set event listener for ctrl + s
-	// 		document.addEventListener('keydown', handleSaveKeyCombination)
-	// 		return () => {
-	// 			console.log('remove event listener')
-	// 			document.removeEventListener('keydown', handleSaveKeyCombination)
-	// 		}
-	// 	}
-	// }, [hasCurrentProject])
+	useEffect(() => {
+		if (hasCurrentProject) {
+			// set event listener for ctrl + s
+			document.addEventListener('keydown', handleSaveKeyCombination)
+			return () => {
+				document.removeEventListener('keydown', handleSaveKeyCombination)
+			}
+		}
+	}, [hasCurrentProject])
 
 	useEffect(() => {
 		if (isEditing && inputRef.current) inputRef.current.focus()
@@ -96,14 +102,25 @@ const MenuProjectForm = () => {
 								{currentProject?.name ?? ''}
 							</h2>
 							{isLoggedIn ? (
-								<small className='text-gray-500 dark:text-gray-400 text-right text-xs'>
+								<small className='text-gray-500 dark:text-gray-400 text-center text-xs'>
 									Double click project name to edit
 								</small>
 							) : (
-								<a href={'/login'} className='text-gray-500 dark:text-gray-400 text-right text-xs'>
+								<p href={'/login'} className='text-gray-500 dark:text-gray-400 text-center text-xs'>
 									Login to keep save your changes
-								</a>
+								</p>
 							)}
+							<hr className='w-full h-px my-3 bg-gray-200 border-0 dark:bg-gray-700'></hr>
+							<div className='text-gray-500 dark:text-gray-400 text-xs text-left'>
+								{currentProject && currentProject?.id?.length > 0 ? (
+									<p className='mb-1'>
+										<strong>Press Ctrl + S</strong> to save changes
+									</p>
+								) : null}
+								<p>
+									<strong>Press Alt + S</strong> to format all codes
+								</p>
+							</div>
 						</div>
 					) : (
 						<form className='max-w-md mx-auto w-full flex flex-row gap-3'>

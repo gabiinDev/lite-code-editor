@@ -4,18 +4,13 @@ import type { IProjectModel } from '../../../types/models/project/projectModel'
 import { getProjectBySlugService } from '../../../services/project/projectService'
 
 export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
-	const userId = context.locals.user?.id ?? null
 	const slug = context.params?.slug ?? null
-
-	if (!userId) {
-		return ApiResponse.unAuthorized()
-	}
 
 	if (!slug) {
 		return ApiResponse.error('Cannot find slug un params')
 	}
 
-	const result = await getProjectBySlugService(userId, slug)
+	const result = await getProjectBySlugService(slug)
 
 	if (result.status.type === 'error') {
 		return ApiResponse.error(result.errors)

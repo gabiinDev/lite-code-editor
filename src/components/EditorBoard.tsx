@@ -63,6 +63,15 @@ export const EditorBoard = () => {
 		onDidChangeContentCallback: handleDidChangeContentCallback
 	})
 
+	const handleFormatKeyCombination = async (e: KeyboardEvent) => {
+		if (e.altKey && e.key === 's') {
+			e.preventDefault()
+			cssEditor.formatCode()
+			htmlEditor.formatCode()
+			jsEditor.formatCode()
+		}
+	}
+
 	useEffect(() => {
 		setEditorsLoading(true)
 		window.MonacoEnvironment = {
@@ -98,6 +107,15 @@ export const EditorBoard = () => {
 		}
 		setEditorsLoading(false)
 	}, [currentProject?.id])
+
+	useEffect(() => {
+		if (hasCurrentProject) {
+			document.addEventListener('keydown', handleFormatKeyCombination)
+			return () => {
+				document.removeEventListener('keydown', handleFormatKeyCombination)
+			}
+		}
+	}, [hasCurrentProject])
 
 	return (
 		<>

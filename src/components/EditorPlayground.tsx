@@ -25,7 +25,6 @@ const EditorPlayground = ({ projectState, slug }: IProps) => {
 	} = useProject()
 
 	useEffect(() => {
-		console.log('setea estado proyecto', hasCurrentProject, projectState.state)
 		if (projectState.state === 'new') {
 			setDefaultCurrentProject()
 			setHasCurrentProject(true)

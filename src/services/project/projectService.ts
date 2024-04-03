@@ -56,9 +56,13 @@ export async function getProjectsService(
 	return ServiceResponse.success(mappedData)
 }
 
+export interface ISaveOrUpdateProjectResponse {
+	slug: string
+}
+
 export async function saveOrUpdateProjectsService(
 	project: IProjectModel
-): Promise<IServiceResult<null>> {
+): Promise<IServiceResult<ISaveOrUpdateProjectResponse | null>> {
 	// validate correct project idUser
 	if (project.idUser === null || project.idUser === 'undefined' || project.idUser === '') {
 		return ServiceResponse.validationError('Usuario incorrecto')
@@ -80,20 +84,14 @@ export async function saveOrUpdateProjectsService(
 }
 
 export async function getProjectBySlugService(
-	userId: string,
 	slug: string
 ): Promise<IServiceResult<IProjectModel | null>> {
-	// validate correct userId
-	if (userId === null || userId === 'undefined' || userId === '') {
-		return ServiceResponse.validationError('Usuario incorrecto')
-	}
-
 	// validate correct slug
 	if (slug === null || slug === 'undefined' || slug === '') {
 		return ServiceResponse.validationError('Slug incorrecto')
 	}
 
-	const project = await getProjectBySlugQuery(userId, slug)
+	const project = await getProjectBySlugQuery(slug)
 	if (project.status.type === 'error') {
 		return ServiceResponse.error(project.errors!)
 	}
@@ -136,7 +134,9 @@ export async function getProjectBySlugService(
 	return ServiceResponse.success<IProjectModel | null>(mappedData)
 }
 
-async function insertProject(project: IProjectModel): Promise<IServiceResult<null>> {
+async function insertProject(
+	project: IProjectModel
+): Promise<IServiceResult<ISaveOrUpdateProjectResponse | null>> {
 	// generate project id
 	const projectId = generateRandomId()
 	const projectConfigId = generateRandomId()
@@ -173,10 +173,12 @@ async function insertProject(project: IProjectModel): Promise<IServiceResult<nul
 		return ServiceResponse.error(result.errors!)
 	}
 
-	return ServiceResponse.success(null)
+	return ServiceResponse.success({ slug: project.slug })
 }
 
-async function updateProject(project: IProjectModel): Promise<IServiceResult<null>> {
+async function updateProject(
+	project: IProjectModel
+): Promise<IServiceResult<ISaveOrUpdateProjectResponse | null>> {
 	// appply slug to project
 	project.slug = slugify(project.name)
 	// create url
@@ -204,5 +206,5 @@ async function updateProject(project: IProjectModel): Promise<IServiceResult<nul
 		return ServiceResponse.error(result.errors!)
 	}
 
-	return ServiceResponse.success(null)
+	return ServiceResponse.success({ slug: project.slug })
 }
