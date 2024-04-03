@@ -26,6 +26,7 @@ const MenuAside = () => {
 	const handleShareClick = () => {
 		if (hasCurrentProject && (currentProject?.id?.length ?? 0) > 0) {
 			const url = `${PROJECTS_BASE_URL}/${currentProject?.slug}`
+			console.log('url', url)
 			navigator.clipboard.writeText(url).then(
 				() => {
 					/* clipboard successfully set */

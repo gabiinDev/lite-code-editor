@@ -112,5 +112,5 @@ export const slugify = (text: string) => {
 }
 
 export const buildURL = (pathToGo: string): string => {
-	return `${import.meta.env.BASE_URL}/${pathToGo}`
+	return `${window.location.origin}/${pathToGo}`
 }

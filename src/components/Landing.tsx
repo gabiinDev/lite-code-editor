@@ -2,7 +2,11 @@
 import { useEffect } from 'preact/hooks'
 import BoxAddNew from './BoxAddNew'
 import useProject from '../hooks/useProject'
-import { PROJECTS_BASE_ROUTE, type IProjectModel } from '../types/models/project/projectModel'
+import {
+	PROJECTS_BASE_ROUTE,
+	PROJECTS_BASE_URL,
+	type IProjectModel
+} from '../types/models/project/projectModel'
 import Loading from './Loading'
 import BoxSigin from './BoxSignin'
 import useUser from '../hooks/useUser'
@@ -40,7 +44,7 @@ const Landing = () => {
 							<BoxSigin linkTo='/api/auth/github' />
 						) : (
 							userProjects?.map((project: IProjectModel) => (
-								<BoxEdit name={project.name} linkTo={`/${PROJECTS_BASE_ROUTE}/${project.slug}`} />
+								<BoxEdit name={project.name} linkTo={`${PROJECTS_BASE_ROUTE}/${project.slug}`} />
 							))
 						)}
 					</div>

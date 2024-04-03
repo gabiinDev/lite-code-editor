@@ -3,9 +3,9 @@ import { PROJECT_TYPE_FULL_FRONTEND, type IProjectTypeModel } from './projectTyp
 
 export const PROJECTS_BASE_ROUTE = '/projects'
 export const PROJECTS_JAVASCRIPT_BASE_ROUTE = `${PROJECTS_BASE_ROUTE}/javascript`
-export const PROJECTS_BASE_URL = `${import.meta.env.BASE_URL}${PROJECTS_BASE_ROUTE}`
+export const PROJECTS_BASE_URL = `${import.meta.env.PUBLIC_SITE_URL}${PROJECTS_BASE_ROUTE}`
 export const PROJECTS_JAVASCRIPT_BASE_URL = `${
-	import.meta.env.BASE_URL
+	import.meta.env.PUBLIC_SITE_URL
 }${PROJECTS_JAVASCRIPT_BASE_ROUTE}`
 
 export interface IProjectModel {
