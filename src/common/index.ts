@@ -54,7 +54,7 @@ export const createHtmlTemplate = (
 		${getScriptTag(externalFramework)}
 		${setScriptToInitExternal(externalFramework)}
   </head>
-  <body>
+  <body style="overflow: hidden;">
     ${html}
     <script type="module">
     ${js}

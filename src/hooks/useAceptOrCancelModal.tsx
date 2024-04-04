@@ -101,7 +101,6 @@ const useAceptOrCancelModal = ({ elementId = 'popup-modal' }: Props) => {
 	)
 
 	const showModal = (content: string) => {
-		console.log('showModal')
 		setModalContent(content)
 		if (modalRef.current) modalRef.current.show()
 	}

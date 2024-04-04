@@ -9,7 +9,6 @@ import {
 export default async function () {
 	let migrationStep = ''
 	try {
-		console.log('pasa por aca')
 		// poblar tipos de cuenta
 		migrationStep = 'poblar tipos de cuenta'
 		await db.insert(AccountType).values([

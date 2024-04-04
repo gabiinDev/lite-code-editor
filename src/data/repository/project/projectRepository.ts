@@ -44,9 +44,6 @@ export async function insertProjectCommand(
 	projectConfig: IProjectConfigEntity
 ): Promise<IRepositoryResult<null>> {
 	try {
-		console.log('project to db', project)
-		console.log('project config to db', projectConfig)
-
 		// validate correct userId
 		if (project.id_user === null || project.id_user === 'undefined' || project.id_user === '') {
 			return RepositoryResponse.validationError('Usuario incorrecto')
@@ -95,9 +92,6 @@ export async function updateProjectCommand(
 	projectConfig: IProjectConfigEntity
 ): Promise<IRepositoryResult<null>> {
 	try {
-		console.log('project to db', project)
-		console.log('project config to db', projectConfig)
-
 		// validate correct userId
 		if (project.id_user === null || project.id_user === 'undefined' || project.id_user === '') {
 			return RepositoryResponse.validationError('Usuario incorrecto')

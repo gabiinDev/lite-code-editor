@@ -6,7 +6,6 @@ import CloseIcon from '../icon/CloseIcon'
 import { useStore } from '@nanostores/preact'
 import useUser from '../hooks/useUser'
 import useProject from '../hooks/useProject'
-import Loading from './Loading'
 import { PROJECTS_BASE_ROUTE } from '../types/models/project/projectModel'
 // import useAceptOrCancelModal from '../hooks/useAceptOrCancelModal'
 
@@ -56,7 +55,7 @@ const MenuProjectForm = () => {
 	}
 
 	const handleSaveKeyCombination = async (e: KeyboardEvent) => {
-		if (isLoggedIn && e.ctrlKey && e.key === 's') {
+		if (isLoggedIn && e.altKey && e.key === 's') {
 			e.preventDefault()
 			if (currentProject && currentProject?.id?.length > 0) await saveChanges()
 		}
@@ -68,7 +67,6 @@ const MenuProjectForm = () => {
 
 	useEffect(() => {
 		if (hasCurrentProject) {
-			// set event listener for ctrl + s
 			document.addEventListener('keydown', handleSaveKeyCombination)
 			return () => {
 				document.removeEventListener('keydown', handleSaveKeyCombination)
@@ -111,14 +109,17 @@ const MenuProjectForm = () => {
 								</p>
 							)}
 							<hr className='w-full h-px my-3 bg-gray-200 border-0 dark:bg-gray-700'></hr>
-							<div className='text-gray-500 dark:text-gray-400 text-xs text-left'>
+							<div className='text-gray-500 dark:text-gray-400 text-xs text-center'>
 								{currentProject && currentProject?.id?.length > 0 ? (
 									<p className='mb-1'>
-										<strong>Press Ctrl + S</strong> to save changes
+										<strong>Press Alt + S</strong> to save changes
 									</p>
 								) : null}
+								<p className='mb-1'>
+									<strong>Press Alt + F</strong> to format all codes
+								</p>
 								<p>
-									<strong>Press Alt + S</strong> to format all codes
+									<strong>Press Alt + G</strong> for full preview
 								</p>
 							</div>
 						</div>
@@ -153,9 +154,7 @@ const MenuProjectForm = () => {
 						</form>
 					)}
 				</div>
-			) : (
-				<Loading />
-			)}
+			) : null}
 			{/* {ModalHtmlElement()} */}
 			{/* <AceptOrCancelModal
 				elementId='popup-modal'

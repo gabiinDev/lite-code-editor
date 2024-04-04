@@ -11,7 +11,5 @@ export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
 	const sessionCookie = lucia.createBlankSessionCookie()
 	context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
 
-	console.log('borra sesion')
-
 	return context.redirect('/')
 }

@@ -3,14 +3,15 @@ import { useEffect } from 'preact/hooks'
 import BoxAddNew from './BoxAddNew'
 import useProject from '../hooks/useProject'
 import { PROJECTS_BASE_ROUTE, type IProjectModel } from '../types/models/project/projectModel'
-import Loading from './Loading'
 import BoxSigin from './BoxSignin'
 import useUser from '../hooks/useUser'
 import BoxEdit from './BoxEdit'
 import MenuUserSection from './MenuUserSection'
+import useLoading from '../hooks/useLoading'
 
 const Landing = () => {
 	const { isLoggedIn } = useUser()
+	const { Loading } = useLoading('Loading projects ...')
 	const { getUserProyects, userProjects, loadingProjects, setLoadingProjects } = useProject()
 	useEffect(() => {
 		setLoadingProjects(true)

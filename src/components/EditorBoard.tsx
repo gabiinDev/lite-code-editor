@@ -12,17 +12,19 @@ import JsEditorContent from './JsEditorContent'
 import PreviewContent from './PreviewContent'
 import useMonacoEditor, { type Language } from '../hooks/useMonacoEditor'
 import useSplit from '../hooks/useSplit'
-
-import Loading from './Loading'
 import useProject from '../hooks/useProject'
+import useLoading from '../hooks/useLoading'
+import { PROJECTS_BASE_URL } from '../types/models/project/projectModel'
+import { fullPreviewStore } from '../store/fullPreviewStore'
 
 interface ReferenceHTMLElement extends JSX.Element {
 	base: HTMLElement
 }
 
 export const EditorBoard = () => {
-	const [editorsLoading, setEditorsLoading] = useState(false)
+	const [editorsLoading, setEditorsLoading] = useState(true)
 	const { currentProject, hasCurrentProject, setCurrentProjectConfig } = useProject()
+	const { Loading } = useLoading('Loading editor ...')
 
 	const initSplit = useSplit()
 	const gutterColRef = useRef(null as unknown as HTMLDivElement)
@@ -64,7 +66,7 @@ export const EditorBoard = () => {
 	})
 
 	const handleFormatKeyCombination = async (e: KeyboardEvent) => {
-		if (e.altKey && e.key === 's') {
+		if (e.altKey && e.key === 'f') {
 			e.preventDefault()
 			cssEditor.formatCode()
 			htmlEditor.formatCode()
@@ -72,8 +74,22 @@ export const EditorBoard = () => {
 		}
 	}
 
+	const handlePreviewKeyCombination = async (e: KeyboardEvent) => {
+		if (e.altKey && e.key === 'g' && currentProject && currentProject?.config) {
+			e.preventDefault()
+			fullPreviewStore.set({
+				name: currentProject.name,
+				css: currentProject.config.css,
+				html: currentProject.config.html,
+				javascript: currentProject.config.javascript,
+				externalFramework: currentProject.config.externalFramework,
+				selectedExternalFrameworkCss: currentProject.config.selectedExternalFrameworkCss
+			})
+			window.open(`${PROJECTS_BASE_URL}/preview`, '_blank', 'resizable,scrollbars,status')
+		}
+	}
+
 	useEffect(() => {
-		setEditorsLoading(true)
 		window.MonacoEnvironment = {
 			getWorker(_: string, label: string) {
 				if (label === 'html') {
@@ -94,28 +110,30 @@ export const EditorBoard = () => {
 				cssEditor.initEditor({ element: cssRef.current.base }),
 				htmlEditor.initEditor({ element: htmlRef.current.base }),
 				jsEditor.initEditor({ element: jsRef.current.base })
-			]).then()
+			]).then(() => {
+				cssEditor.setEditorValue(currentProject?.config?.css ?? '')
+				htmlEditor.setEditorValue(currentProject?.config?.html ?? '')
+				jsEditor.setEditorValue(currentProject?.config?.javascript ?? '')
 
-			cssEditor.setEditorValue(currentProject?.config?.css ?? '')
-			htmlEditor.setEditorValue(currentProject?.config?.html ?? '')
-			jsEditor.setEditorValue(currentProject?.config?.javascript ?? '')
+				initSplit({
+					gutterColElement: gutterColRef.current,
+					gutterRowElement: gutterRowRef.current
+				})
 
-			initSplit({
-				gutterColElement: gutterColRef.current,
-				gutterRowElement: gutterRowRef.current
+				setEditorsLoading(false)
 			})
-		}
-		setEditorsLoading(false)
+		} else setEditorsLoading(false)
 	}, [currentProject?.id])
 
 	useEffect(() => {
-		if (hasCurrentProject) {
-			document.addEventListener('keydown', handleFormatKeyCombination)
-			return () => {
-				document.removeEventListener('keydown', handleFormatKeyCombination)
-			}
+		document.addEventListener('keydown', handleFormatKeyCombination)
+		document.addEventListener('keydown', handlePreviewKeyCombination)
+
+		return () => {
+			document.removeEventListener('keydown', handleFormatKeyCombination)
+			document.removeEventListener('keydown', handlePreviewKeyCombination)
 		}
-	}, [hasCurrentProject])
+	}, [currentProject?.id])
 
 	return (
 		<>

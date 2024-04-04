@@ -5,10 +5,7 @@ import { ApiResponse } from '../../../types/connection/apiResponse'
 export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
 	const userId = context.locals.user?.id ?? null
 
-	console.log('desde api', userId)
-
 	if (!userId) {
-		console.log('SIN AUTORIZAR')
 		return ApiResponse.unAuthorized()
 	}
 

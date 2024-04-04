@@ -1,0 +1,23 @@
+---
+import FullPreview from '../../components/FullPreview'
+---
+
+<main class='h-screen w-full overflow-y-hidden'>
+  <div>
+    <FullPreview client:only />
+  </div>
+</main>
+<style is:inline>
+  * {
+    box-sizing: border-box;
+  }
+
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+
+  body {
+    margin: 0;
+  }
+</style>
