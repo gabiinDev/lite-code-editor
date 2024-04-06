@@ -1,0 +1,21 @@
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 10px 1fr;
+    grid-template-rows: none;
+}
+
+.gutter-col {
+    grid-row: 1/-1;
+    cursor: col-resize;
+}
+
+.gutter-col-1 {
+    grid-column: 2;
+}
+
+#gutter-col {
+  cursor: col-resize;
+  background-repeat: no-repeat;
+  background-position: 50% center;
+  background-image: url('/assets/resizeY.png');
+}

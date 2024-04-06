@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import EditorPlayground from '../../components/EditorPlayground'
+import '../../styles/editor-board-split.css'
 ---
 
-<Layout title='Lite Code Editor'>
-  <EditorPlayground client:only projectState={{ state: 'new' }} />
+<Layout title='Lite Code Editor | Full Frontend'>
+  <EditorPlayground client:only state='new' type='full-frontend' />
 </Layout>

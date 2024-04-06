@@ -1,6 +1,6 @@
 /* eslint-disable multiline-ternary */
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { menuOpenStore } from '../store/menuStore'
+import { menuOpenStore, menuProjectTypeStore } from '../store/menuStore'
 import SaveIcon from '../icon/SaveIcon'
 import CloseIcon from '../icon/CloseIcon'
 import { useStore } from '@nanostores/preact'
@@ -11,6 +11,7 @@ import { PROJECTS_BASE_ROUTE } from '../types/models/project/projectModel'
 
 const MenuProjectForm = () => {
 	const menuOpen = useStore(menuOpenStore)
+	const menuProjectType = useStore(menuProjectTypeStore)
 	const [isEditing, setIsEditing] = useState(false)
 	const inputRef = useRef(null as unknown as HTMLInputElement)
 	const { isLoggedIn } = useUser()
@@ -115,12 +116,20 @@ const MenuProjectForm = () => {
 										<strong>Press Alt + S</strong> to save changes
 									</p>
 								) : null}
-								<p className='mb-1'>
-									<strong>Press Alt + F</strong> to format all codes
-								</p>
-								<p>
-									<strong>Press Alt + G</strong> for full preview
-								</p>
+								{menuProjectType === 'full-frontend' ? (
+									<>
+										<p className='mb-1'>
+											<strong>Press Alt + F</strong> to format all codes
+										</p>
+										<p>
+											<strong>Press Alt + G</strong> for full preview
+										</p>
+									</>
+								) : (
+									<p className='mb-1'>
+										<strong>Press Alt + F</strong> to format javascript code
+									</p>
+								)}
 							</div>
 						</div>
 					) : (

@@ -1,3 +1,5 @@
+export type ProjectType = 'full-frontend' | 'full-javascript'
+
 export interface IProjectTypeModel {
 	id: string
 	name: string

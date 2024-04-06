@@ -1,7 +1,13 @@
 /* eslint-disable multiline-ternary */
+import { useStore } from '@nanostores/preact'
 import useProject from '../hooks/useProject'
+import { menuProjectTypeStore } from '../store/menuStore'
 // import useToast from '../hooks/useToast'
-import { PROJECTS_BASE_URL } from '../types/models/project/projectModel'
+import {
+	PROJECTS_BASE_ROUTE,
+	PROJECTS_BASE_URL,
+	PROJECTS_JAVASCRIPT_BASE_ROUTE
+} from '../types/models/project/projectModel'
 
 const OptionIcon = () => {
 	return (
@@ -25,6 +31,7 @@ const OptionIcon = () => {
 const MenuAside = () => {
 	// const { toastHtmlElement, showToast, setShowToast } = useToast()
 	const { hasCurrentProject, currentProject } = useProject()
+	const menuProjectType = useStore(menuProjectTypeStore)
 
 	const handleShareClick = () => {
 		if (hasCurrentProject && (currentProject?.id?.length ?? 0) > 0) {
@@ -41,6 +48,14 @@ const MenuAside = () => {
 					// setShowToast(false)
 				}
 			)
+		}
+	}
+
+	const handleNewProjectByTypeClick = () => {
+		if (menuProjectType === 'full-frontend') {
+			window.location.href = `${PROJECTS_JAVASCRIPT_BASE_ROUTE}/new`
+		} else if (menuProjectType === 'full-javascript') {
+			window.location.href = `${PROJECTS_BASE_ROUTE}/new`
 		}
 	}
 
@@ -75,6 +90,18 @@ const MenuAside = () => {
 							</button>
 						</li>
 					) : null}
+					<li class='mb-1'>
+						<button
+							as={'a'}
+							id='share-button'
+							onClick={handleNewProjectByTypeClick}
+							className='block text-sm hover:text-white'
+						>
+							{menuProjectType === 'full-frontend'
+								? 'New javascript project'
+								: 'New frontend project'}
+						</button>
+					</li>
 				</ul>
 			</nav>
 			{/* {showToast ? toastHtmlElement : null} */}

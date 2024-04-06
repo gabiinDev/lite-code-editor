@@ -6,9 +6,14 @@ import {
 	hasCurrentProjectStore,
 	setHasCurrentProjectStore
 } from '../store/projectStore'
-import { PROJECT_DEFAULT_TEMPLATE, type IProjectModel } from '../types/models/project/projectModel'
+import {
+	PROJECT_DEFAULT_TEMPLATE,
+	PROJECT_DEFAULT_TEMPLATE_JAVASCRIPT,
+	type IProjectModel
+} from '../types/models/project/projectModel'
 import type { IProjectConfigModel } from '../types/models/project/projectConfigModel'
 import { useState } from 'preact/hooks'
+import type { ProjectType } from '../types/models/project/projectTypeModel'
 
 const useProject = () => {
 	const currentProject = useStore(currentProjectStore)
@@ -22,8 +27,10 @@ const useProject = () => {
 		setCurrentProjectStore(project)
 	}
 
-	const setDefaultCurrentProject = () => {
-		setCurrentProject(PROJECT_DEFAULT_TEMPLATE)
+	const setDefaultCurrentProject = (type: ProjectType) => {
+		if (type === 'full-frontend') setCurrentProject(PROJECT_DEFAULT_TEMPLATE)
+		else setCurrentProject(PROJECT_DEFAULT_TEMPLATE_JAVASCRIPT)
+
 		setGetingProject(false)
 	}
 
@@ -31,8 +38,8 @@ const useProject = () => {
 		setCurrentProjectConfigStore(config)
 	}
 
-	const cleanCurrentProject = () => {
-		setDefaultCurrentProject()
+	const cleanCurrentProject = (type: ProjectType) => {
+		setDefaultCurrentProject(type)
 		setHasCurrentProjectStore(false)
 	}
 

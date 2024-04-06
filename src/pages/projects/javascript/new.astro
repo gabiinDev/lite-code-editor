@@ -1,8 +1,9 @@
 ---
+import EditorPlayground from '../../../components/EditorPlayground'
 import Layout from '../../../layouts/Layout.astro'
+import '../../../styles/editor-board-javascript-split.css'
 ---
 
-<Layout title='Lite Code Editor - Full JavaScript'>
-  <h1 class='text-base text-white'>Lite Code Editor - Full JavaScript</h1>
-  <!-- <EditorPlayground client:only projectState={{ state: 'new' }} /> -->
+<Layout title='Lite Code Editor | Full JavaScript'>
+  <EditorPlayground client:only state='new' type='full-javascript' />
 </Layout>

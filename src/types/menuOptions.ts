@@ -12,8 +12,4 @@ export interface MenuOptions {
 	items: Array<MenuItem>
 }
 
-export type ProjectStateType = 'new' | 'edit' | 'view'
-
-export interface ProjectState {
-	state: ProjectStateType
-}
+export type ProjectState = 'new' | 'edit' | 'view'

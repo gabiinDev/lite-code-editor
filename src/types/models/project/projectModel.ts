@@ -1,5 +1,9 @@
 import { PROJECT_CONFIG_DEFAULT, type IProjectConfigModel } from './projectConfigModel'
-import { PROJECT_TYPE_FULL_FRONTEND, type IProjectTypeModel } from './projectTypeModel'
+import {
+	PROJECT_TYPE_FULL_FRONTEND,
+	PROJECT_TYPE_FULL_JAVASCRIPT,
+	type IProjectTypeModel
+} from './projectTypeModel'
 
 export const PROJECTS_BASE_ROUTE = '/projects'
 export const PROJECTS_JAVASCRIPT_BASE_ROUTE = `${PROJECTS_BASE_ROUTE}/javascript`
@@ -25,6 +29,18 @@ export const PROJECT_DEFAULT_TEMPLATE: IProjectModel = {
 	id: '',
 	idUser: '',
 	type: PROJECT_TYPE_FULL_FRONTEND,
+	name: 'new project',
+	description: '',
+	config: PROJECT_CONFIG_DEFAULT,
+	url: '',
+	createdAt: new Date(),
+	updatedAt: null
+}
+
+export const PROJECT_DEFAULT_TEMPLATE_JAVASCRIPT: IProjectModel = {
+	id: '',
+	idUser: '',
+	type: PROJECT_TYPE_FULL_JAVASCRIPT,
 	name: 'new project',
 	description: '',
 	config: PROJECT_CONFIG_DEFAULT,

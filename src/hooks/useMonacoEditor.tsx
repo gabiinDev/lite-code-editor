@@ -43,7 +43,7 @@ const useMonacoEditor = ({
 				editorInstanse.onDidChangeModelContent(
 					debounce(() => {
 						onDidChangeContentCallback(editorInstanse?.getValue() ?? '', language)
-					}, 700)
+					}, 500)
 				)
 
 				initExtraSettings(language, monacoInstance)

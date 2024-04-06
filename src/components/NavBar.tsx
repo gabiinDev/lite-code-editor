@@ -1,7 +1,7 @@
 /* eslint-disable multiline-ternary */
 import { useEffect, useRef } from 'preact/hooks'
 
-import { menuOpenStore, setMenuOpenStore } from '../store/menuStore'
+import { menuOpenStore, menuProjectTypeStore, setMenuOpenStore } from '../store/menuStore'
 
 import { Drawer } from 'flowbite'
 import type { DrawerOptions, DrawerInterface } from 'flowbite'
@@ -16,6 +16,7 @@ import MenuUserSection from './MenuUserSection'
 
 const NavBar = () => {
 	const menuOpen = useStore(menuOpenStore)
+	const menuProjectType = useStore(menuProjectTypeStore)
 	const drawerElementRef = useRef(null as unknown as HTMLDivElement)
 	const drawerRef = useRef(null as unknown as DrawerInterface)
 
@@ -75,9 +76,11 @@ const NavBar = () => {
 							<MenuUserSection />
 						</div>
 					</div>
-					<div className='flex flex-row w-full justify-center items-center'>
-						<MenuFrameworkList />
-					</div>
+					{menuProjectType === 'full-frontend' ? (
+						<div className='flex flex-row w-full justify-center items-center'>
+							<MenuFrameworkList />
+						</div>
+					) : null}
 					{
 						// eslint-disable-next-line multiline-ternary
 						menuOpen ? <CloseMenuButton onClick={handleCloseMenu} /> : null

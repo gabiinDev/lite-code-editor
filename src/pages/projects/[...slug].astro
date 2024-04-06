@@ -1,10 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import EditorPlayground from '../../components/EditorPlayground'
+import '../../styles/editor-board-split.css'
 const { slug } = Astro.params
 const user = Astro.locals.user
 ---
 
-<Layout title='Lite Code Editor'>
-  <EditorPlayground client:only projectState={{ state: user?.id ? 'edit' : 'view' }} slug={slug} />
+<Layout title='Lite Code Editor | Full Frontend'>
+  <EditorPlayground
+    client:only
+    state={user?.id ? 'edit' : 'view'}
+    type='full-frontend'
+    slug={slug}
+  />
 </Layout>

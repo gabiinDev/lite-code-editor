@@ -35,7 +35,7 @@ const Landing = () => {
 				</section>
 				<section className='px-8 py-10'>
 					<h3 className='text-3xl text-white opacity-80 font-semibold pb-7'>Projects</h3>
-					<div class='grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-7 items-center w-full place-content-center'>
+					<div className='grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-7 items-center w-full place-content-center'>
 						<BoxAddNew linkTo='/projects/new' />
 						{!isLoggedIn ? (
 							<BoxSigin linkTo='/api/auth/github' />
@@ -45,6 +45,17 @@ const Landing = () => {
 							))
 						)}
 					</div>
+					{isLoggedIn ? (
+						<>
+							<hr className='w-full h-px my-10 bg-gray-200 border-0 dark:bg-gray-700'></hr>
+							<h3 className='text-3xl text-white opacity-80 font-semibold pb-7'>
+								Beta Preview <span className='text-2xl'>(only javascript)</span>
+							</h3>
+							<div className='grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-7 items-center w-full place-content-center'>
+								<BoxAddNew linkTo='/projects/javascript/new' />
+							</div>
+						</>
+					) : null}
 				</section>
 			</article>
 		</section>
